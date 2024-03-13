@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace ToDo_Tasker
+namespace ToDo_Task
 {
     /// <summary>
     /// Interaction logic for App.xaml

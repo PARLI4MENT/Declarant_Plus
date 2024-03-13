@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ToDo_Tasker
+namespace ToDo_Task
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
