@@ -8,18 +8,13 @@ namespace ToDo_Tasker_clr
 {
     public class TableTaskCurrent
     {
-        string ID { get; }
-        string Title { get; set; }
-        string Text { get; set; }
-        DateTime DateCreate { get; set; }
-        DateTime DateEnd { get; set; }
-    }
-    public class TableTaskEnd
-    {
-        string ID { get; }
-        string Title { get; set; }
-        string Text { get; set; }
-        DateTime DateCreate { get; set; }
-        DateTime DateEnd { get; set; }
+        public static string table_name { get; } = "TaskCurrent";
+
+        public string ID { get; set; }
+        public string TitleTask { get; set; }
+        public string TextTask { get; set; }
+        public DateTime DateCreate { get; set; }
+        public DateTime DateEnd { get; set; }
+        public uint Status { get; set; }
     }
 }
