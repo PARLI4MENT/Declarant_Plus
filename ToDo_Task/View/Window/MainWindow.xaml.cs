@@ -16,6 +16,13 @@ namespace ToDo_Task
     /// </summary>
     public partial class MainWindow : Window
     {
+        private void CloseApplicationCommand()
+        {
+            Application.Current.Shutdown();
+        }
+
+
+
         public MainWindow()
         {
             InitializeComponent();
