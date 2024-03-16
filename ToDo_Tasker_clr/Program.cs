@@ -58,7 +58,7 @@ namespace ToDo_Tasker_clr
 
         static void Main(string[] args)
         {
-            var sqlConn = new SQLiteConnection();
+            //var sqlConn = new SQLiteConnection();
 
             // Write from sqlite database
             //try
@@ -81,8 +81,13 @@ namespace ToDo_Tasker_clr
             //Console.WriteLine();
 
             // Read rows from sqlite database
-            
 
+            if (File.Exists("txt.txt"))
+                // EXISTS
+                Console.WriteLine("Exists");
+            else
+                // NOT EXISTS
+                Console.WriteLine("Not exists");
 
 
             Console.ReadKey();

@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:ToDo_Task"
         mc:Ignorable="d"
         x:Name="MainWindows"
-        Title="ToDo Task" Height="450" Width="800" MinWidth="900" MinHeight="600">
+        Title="ToDo Task" Height="450" Width="800" MinWidth="900" MinHeight="600"
+        Loaded="MainWindows_Loaded">
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CloseApplicationCommand}"/>
     </Window.InputBindings>
@@ -19,22 +20,22 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
-
+        
+        
         <Grid Grid.Row="0" ShowGridLines="True" Background="DarkGray">
-            <!--<DataGrid x:Name="dataGrid_Main" AutoGenerateColumns="True" Padding="0" Margin="0">
-                
-            </DataGrid>-->
-            <StackPanel>
-            </StackPanel>
+            <DataGrid x:Name="dataGrid_Main" AutoGenerateColumns="True" Padding="0" Margin="0">
+
+            </DataGrid>
         </Grid>
+        
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" Margin="1 1 1 1">
-                <Button x:Name="btn_CreateTask" Height="60" Width="120" Margin="1 1 1 1">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="1 1 1 1">
+                <Button x:Name="btn_CreateTask" Height="60" Width="120" Margin="1 1 1 1" Click="btn_CreateTask_Click">
                     <StackPanel Orientation="Horizontal">
                         <fa5:ImageAwesome Icon="Regular_PlusSquare" Height="35" Margin="0 0 5 0" Foreground="Green"/>
                         <TextBlock Text="Create task" VerticalAlignment="Center" FontSize="15"/>
@@ -50,6 +51,16 @@
                     <StackPanel Orientation="Horizontal">
                         <fa5:ImageAwesome Icon="Regular_TrashAlt" Height="35" Margin="0 0 5 0" Foreground="Red"/>
                         <TextBlock Text="Delete task" VerticalAlignment="Center" FontSize="15"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <Button x:Name="btn_UpdateTable" Height="60" Width="120" Margin="1 1 10 1" HorizontalAlignment="Right"
+                        Click="btn_UpdateTable_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:ImageAwesome Icon="Regular_ArrowAltCircleUp" Height="35" Margin="0 0 5 0" Foreground="Gray"/>
+                        <TextBlock Text="Update" VerticalAlignment="Center" FontSize="15"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
