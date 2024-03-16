@@ -17,7 +17,6 @@ namespace ToDo_Task
         //    Application.Current.Shutdown();
         //}
 
-        private SQLiteConnection sqlConn;
         private Tasker task;
 
         public MainWindow()
@@ -27,8 +26,8 @@ namespace ToDo_Task
 
         private void MainWindows_Loaded(object sender, RoutedEventArgs e)
         {
-            task = new Tasker(ref sqlConn, dataGrid_Main);
-            Tasker.OpenDB();
+            task = new Tasker(dataGrid_Main);
+            //Tasker.OpenDB();
 
             //if (File.Exists("ToDoBase.db"))
             //    //MessageBox.Show($"{new FileInfo("ToDoBase.db").Directory.FullName}");
@@ -48,7 +47,17 @@ namespace ToDo_Task
 
         private void btn_UpdateTable_Click(object sender, RoutedEventArgs e)
         {
+            //try
+            //{
+            //    string? path = AppDomain.CurrentDomain.BaseDirectory;
+            //    string? path2 = Environment.CurrentDirectory;
+            //    string? path3 = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().
+            //        GetName().CodeBase);
+            //    MessageBox.Show(path);
+            //}
+            //catch (Exception ex){ MessageBox.Show(ex.Message); }
 
+            Tasker.CreateNewDb();
         }
     }
 }

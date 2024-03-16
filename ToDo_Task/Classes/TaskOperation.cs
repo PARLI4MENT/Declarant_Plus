@@ -2,39 +2,55 @@
 using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using ToDo_Task.Classes;
 
 namespace TaskOperation
 {
     internal class Tasker
     {
-        public static SQLiteConnection SqlConn;
+        public static SQLiteConnection SqlConn { get; private set; }
         private static SQLiteDataAdapter sqlAdapter;
         private SQLiteCommand? sqlComm;
-        private static object tableViewer;
-        private static string defSelectFrom = "SELECT * FROM TaskCurrent";
+        private static DataGrid gridView {get; set;}
+        private static string defSelectFrom = "SELECT TitleTask, TextTask, DateEnd FROM TaskCurrent";
         private static string fileDB = "ToDoBase.db";
 
-        public Tasker(ref SQLiteConnection sqlConn, object sender)
+        public Tasker()
         {
-            SqlConn = sqlConn;
-
-            TypeSw
+            SqlConn = new SQLiteConnection();
         }
 
-        private bool CheckDBFile(ref SqlConnection sqlConn)
+        public Tasker(DataGrid dataGrid)
         {
-            if (!File.Exists(fileDB))
-                return false;
-            return true;
+            SqlConn = new SQLiteConnection();
+            gridView = dataGrid;
         }
 
-
+        public static void CreateNewDb()
+        {
+            string appPath = AppDomain.CurrentDomain.BaseDirectory + fileDB;
+            SQLiteConnection.CreateFile(appPath);
+            using (SqlConn = new SQLiteConnection($"Data Source={appPath}; Version = 3;"))
+            {
+                SqlConn.Open();
+                string sqlCmd = "CREATE TABLE TaskCurrent (ID INTEGER PRIMARY KEY ON CONFLICT ABORT AUTOINCREMENT NOT NULL," +
+                    "TitleTask   TEXT (0, 20)," +
+                    "TextTask    TEXT," +
+                    "DateCreated TEXT," +
+                    "DateEnd     TEXT," +
+                    "Status      INTEGER NOT NULL DEFAULT (1));";
+                SQLiteCommand cmd = new SQLiteCommand(sqlCmd, SqlConn);
+                cmd.ExecuteNonQuery();
+            }
+        }
 
         public static void OpenDB()
         {
-            using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3"))
+            if(CheckDbFile(SqlConn))
+            using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
             {
                 SqlConn.Open();
                 SQLiteCommand sqlComm = new SQLiteCommand(defSelectFrom, SqlConn);
@@ -43,9 +59,16 @@ namespace TaskOperation
                 var dataTable = new DataTable("TaskCurrent");
                 sqlAdapter = new SQLiteDataAdapter(sqlComm);
                 sqlAdapter.Fill(dataTable);
-                .ItemsSource = dataTable.DefaultView;
+                gridView.ItemsSource = dataTable.DefaultView;
                 sqlAdapter.Update(dataTable);
             }
+        }
+
+        private static bool CheckDbFile(SQLiteConnection sqlConn)
+        {
+            if (!File.Exists(fileDB))
+                return false;
+            return true;
         }
 
         private void UpdateTable(object sender)

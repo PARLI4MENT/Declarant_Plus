@@ -8,24 +8,51 @@ namespace ToDo_Task.Classes
 {
     static class TypeSwitch
     {
-        protected class CaseInfo
-        {  
+        public class CaseInfo
+        {
             public bool IsDefault { get; set; }
-            public Type Target {  get; set; }
+            public Type Target { get; set; }
             public Action<object> Action { get; set; }
         }
 
-        private static void Do(object sender, params CaseInfo[] cases)
+        public static void Do(object source, params CaseInfo[] cases)
         {
-            var type = sender.GetType();
+            var type = source.GetType();
             foreach (var entry in cases)
             {
                 if (entry.IsDefault || entry.Target.IsAssignableFrom(type))
                 {
-                    entry.Action(sender);
+                    entry.Action(source);
                     break;
                 }
             }
+        }
+
+        public static CaseInfo Case<T>(Action action)
+        {
+            return new CaseInfo()
+            {
+                Action = x => action(),
+                Target = typeof(T)
+            };
+        }
+
+        public static CaseInfo Case<T>(Action<T> action)
+        {
+            return new CaseInfo()
+            {
+                Action = (x) => action((T)x),
+                Target = typeof(T)
+            };
+        }
+
+        public static CaseInfo Default(Action action)
+        {
+            return new CaseInfo()
+            {
+                Action = x => action(),
+                IsDefault = true
+            };
         }
 
         public static void TypeConvert(object sender)
@@ -33,3 +60,4 @@ namespace ToDo_Task.Classes
         }
     }
 }
+
