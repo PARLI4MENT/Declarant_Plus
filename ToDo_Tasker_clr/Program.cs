@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using System.Data.SQLite;
 
 namespace ToDo_Tasker_clr
@@ -52,42 +53,58 @@ namespace ToDo_Tasker_clr
             catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
         }
     }
+
+    //class EventReminder
+    //{
+    //    private System.Timers.Timer timer;
+
+    //    public EventReminder()
+    //    {
+    //        timer = new System.Timers.Timer();
+    //        timer.Elapsed += Timer_Elapsed;
+    //        timer.Interval = TimeSpan.FromMinutes(1).TotalMilliseconds;
+    //        timer.AutoReset = true;
+    //        timer.Start();
+    //    }
+
+    //    private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
+    //    {
+
+    //    }
+    //}
+
+    public class Reminder
+    {
+        private DateTime nextDate;
+        public Reminder(DateTime _nextDate)
+        {
+            nextDate = _nextDate;
+            Console.WriteLine($"Now:\t{DateTime.Now}\nNext:\t{nextDate.ToString()}");
+        }
+        public bool CheckDoneTask()
+        {
+            if (DateTime.Now >= nextDate)
+            {
+                Console.WriteLine("Таймер сработал");
+                return true;
+            }
+            Console.WriteLine($"Осталось: {nextDate - DateTime.Now}");
+            return false;
+        }
+    }
+
     internal class Program
     {
         private const string? connString = "Data Source=ToDoBase.db";
+        private static System.Threading.Timer ts;
+        private static Reminder rem;
 
         static void Main(string[] args)
         {
-            //var sqlConn = new SQLiteConnection();
+            int period = 60000;
+            DateTime date = DateTime.Now;
+            date = date.AddMinutes(2);
 
-            // Write from sqlite database
-            //try
-            //{
-            //    using (sqlConn = new SQLiteConnection(connString))
-            //    {
-            //        sqlConn.Open();
-            //        Console.WriteLine("Connection is open!");
-
-            //        SQLiteCommand sqlComm = sqlConn.CreateCommand();
-            //        DateTime dateEnd = DateTime.Now;
-            //        sqlComm.CommandText = "INSERT INTO TaskCurrent (TitleTask, TextTask, DateCreated, DateEnd)" +
-            //            $" VALUES ('Title 2', 'Text ToDo 2', '{DateTime.Now}', '{dateEnd.AddMinutes(1.0)}')";
-            //        sqlComm.ExecuteNonQuery();
-
-            //    }
-            //    Console.WriteLine("Connection is close.");
-            //}
-            //catch (Exception ex) { Console.WriteLine(ex.Message); }
-            //Console.WriteLine();
-
-            // Read rows from sqlite database
-
-            if (File.Exists("txt.txt"))
-                // EXISTS
-                Console.WriteLine("Exists");
-            else
-                // NOT EXISTS
-                Console.WriteLine("Not exists");
 
 
             Console.ReadKey();
