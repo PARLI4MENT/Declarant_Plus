@@ -33,7 +33,7 @@
             label2 = new Label();
             richTextBox_TextTask = new RichTextBox();
             dateTimePicker_DateEnd = new DateTimePicker();
-            button_CreateTask = new Button();
+            button_EditTask = new Button();
             SuspendLayout();
             // 
             // label1
@@ -78,21 +78,22 @@
             dateTimePicker_DateEnd.Size = new Size(141, 23);
             dateTimePicker_DateEnd.TabIndex = 3;
             // 
-            // button_CreateTask
+            // button_EditTask
             // 
-            button_CreateTask.Location = new Point(12, 279);
-            button_CreateTask.Name = "button_CreateTask";
-            button_CreateTask.Size = new Size(303, 23);
-            button_CreateTask.TabIndex = 4;
-            button_CreateTask.Text = "Редактировать задачу";
-            button_CreateTask.UseVisualStyleBackColor = true;
+            button_EditTask.Location = new Point(12, 279);
+            button_EditTask.Name = "button_EditTask";
+            button_EditTask.Size = new Size(303, 23);
+            button_EditTask.TabIndex = 4;
+            button_EditTask.Text = "Редактировать задачу";
+            button_EditTask.UseVisualStyleBackColor = true;
+            button_EditTask.Click += button_EditTask_Click;
             // 
             // EditTaskWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(338, 314);
-            Controls.Add(button_CreateTask);
+            Controls.Add(button_EditTask);
             Controls.Add(dateTimePicker_DateEnd);
             Controls.Add(richTextBox_TextTask);
             Controls.Add(label2);
@@ -100,6 +101,7 @@
             Controls.Add(textBox_TileTask);
             Name = "EditTaskWindow";
             Text = "Редактировать задачу";
+            Load += EditTaskWindow_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -110,6 +112,6 @@
         private Label label2;
         private RichTextBox richTextBox_TextTask;
         private DateTimePicker dateTimePicker_DateEnd;
-        private Button button_CreateTask;
+        private Button button_EditTask;
     }
 }

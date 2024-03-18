@@ -40,6 +40,8 @@ namespace ToDo_Task_WinForm
 
         private void button_EditTask_Click(object sender, EventArgs e)
         {
+            EditTaskWindow editTaskWindow = new EditTaskWindow(dataGridView_Main);
+            editTaskWindow.ShowDialog();
         }
 
         private void button_DeleteTask_Click(object sender, EventArgs e)

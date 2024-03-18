@@ -128,6 +128,7 @@ namespace TaskOperation
                     SQLiteCommand sqlComm = new SQLiteCommand(delQueryByID, SqlConn);
                     sqlComm.ExecuteNonQuery();
                     Debug.WriteLine($"DELETED ROW  WHERE ID => {ID}");
+                    UpdateTable();
                 }
             }
         }
@@ -147,7 +148,7 @@ namespace TaskOperation
         /// </summary>
         private static void CustomTableColumn()
         {
-            //gridView.Columns["ID"].Visible = false;
+            gridView.Columns["ID"].Visible = false;
 
             gridView.Columns["TitleTask"].HeaderText = "Задача";
             gridView.Columns["TitleTask"].Width = 70;
@@ -202,6 +203,23 @@ namespace TaskOperation
                 }
             }
             CustomTableColumn();
+        }
+
+        public async static void UpdateTask(TableTaskCurrent tasker)
+        {
+            using (SqlConn = new SQLiteConnection($"Data Source={fileDB};Version=3;"))
+            {
+                SqlConn.Open();
+                SQLiteCommand sqlComm = new SQLiteCommand();
+                sqlComm.Connection = SqlConn;
+                sqlComm.CommandText = $"UPDATE TaskCurrent " +
+                    $"SET TitleTask = '{tasker.TitleTask}', TextTask = '{tasker.TextTask}', DateCreated = '{DateTime.Now.ToString()}', DateEnd = '{tasker.DateEnd.ToString()}', Status = 1 " +
+                    $"WHERE ID = {tasker.ID};";
+                sqlComm.ExecuteNonQuery();
+                Debug.WriteLine("EXECUTE QUERY =>\t" + $"UPDATE TaskCurrent (TitleTask, TextTask, DateCreated, DateEnd, Status)" +
+                    $" VALUES ({tasker.TitleTask}, {tasker.TextTask}, {DateTime.Now.ToString()}, {tasker.DateEnd.ToString()}, 1) WHERE ID = {tasker.ID};");
+            }
+            UpdateTable();
         }
     }
 }
