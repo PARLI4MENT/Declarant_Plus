@@ -5,11 +5,9 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo_Tasker_clr", "ToDo_Tasker_clr\ToDo_Tasker_clr.csproj", "{C07036F5-435A-43AD-986A-CAE559C76BFA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo_Task", "ToDo_Task\ToDo_Task.csproj", "{FB3620C6-99B0-448A-AC66-02E4A1CA642B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNotify", "TestNotify\TestNotify.csproj", "{EFA8E52E-6000-450A-8185-3B16B5028C39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo_Task_WinForm", "ToDo_Task_WinForm\ToDo_Task_WinForm.csproj", "{8A2B50F1-9F30-4D03-9A7E-03FED5030366}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo_Task_WinForm", "ToDo_Task_WinForm\ToDo_Task_WinForm.csproj", "{8A2B50F1-9F30-4D03-9A7E-03FED5030366}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +19,6 @@ Global
 		{C07036F5-435A-43AD-986A-CAE559C76BFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C07036F5-435A-43AD-986A-CAE559C76BFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C07036F5-435A-43AD-986A-CAE559C76BFA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB3620C6-99B0-448A-AC66-02E4A1CA642B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB3620C6-99B0-448A-AC66-02E4A1CA642B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB3620C6-99B0-448A-AC66-02E4A1CA642B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB3620C6-99B0-448A-AC66-02E4A1CA642B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EFA8E52E-6000-450A-8185-3B16B5028C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFA8E52E-6000-450A-8185-3B16B5028C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFA8E52E-6000-450A-8185-3B16B5028C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
