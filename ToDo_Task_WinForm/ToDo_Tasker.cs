@@ -26,17 +26,6 @@ namespace ToDo_Task_WinForm
         private DataTable dataTable = new DataTable();
         #endregion
 
-        private void ExecuteQuery(string query)
-        {
-            using (sqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
-            {
-                this.sqlConn.Open();
-                this.sqlComm = sqlConn.CreateCommand();
-                this.sqlComm.CommandText = standartQuery;
-                this.sqlComm.ExecuteNonQuery();
-            }
-        }
-
         private void ToDo_Tasker_Load(object sender, EventArgs e)
         {
             tasker = new ToDoTasker(dataGridView_Main);
@@ -45,17 +34,18 @@ namespace ToDo_Task_WinForm
 
         private void button_CreateTask_Click(object sender, EventArgs e)
         {
-
+            CreateTaskWindow taskWindow = new CreateTaskWindow();
+            taskWindow.ShowDialog();
         }
 
         private void button_EditTask_Click(object sender, EventArgs e)
         {
-
         }
 
         private void button_DeleteTask_Click(object sender, EventArgs e)
         {
 
+            ToDoTasker.DeleteRecord(dataGridView_Main);
         }
 
         private void button_Update_Click(object sender, EventArgs e)

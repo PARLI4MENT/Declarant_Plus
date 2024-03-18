@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ToDo_Task_WinForm.Classes;
-using System.Data.Entity.Migrations.Model;
 using System.Diagnostics;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace TaskOperation
 {
@@ -60,13 +55,12 @@ namespace TaskOperation
                 using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
                 {
                     SqlConn.Open();
-                    SQLiteCommand sqlComm = new SQLiteCommand(selectViewData, SqlConn);
+                    SQLiteCommand sqlComm = new SQLiteCommand(selectAllData, SqlConn);
                     sqlComm.ExecuteNonQuery();
 
                     var dataTable = new DataTable("TaskCurrent");
                     sqlAdapter = new SQLiteDataAdapter(sqlComm);
                     sqlAdapter.Fill(dataTable);
-                    //gridView.ItemsSource = dataTable.DefaultView;
                     gridView.DataSource = dataTable.DefaultView;
                     sqlAdapter.Update(dataTable);
                     CustomTableColumn();
@@ -96,10 +90,13 @@ namespace TaskOperation
                     {
                         while (reader.Read())
                         {
-                            DateTime tmp = Convert.ToDateTime(reader["DateEnd"]);
-                            Debug.WriteLine(tmp.ToString());
-                            if (tmp < DateTime.Now)
-                                DeleteRecord(SqlConn, Int16.Parse(reader["ID"].ToString()));
+                            if (reader["DateEnd"].ToString() != string.Empty)
+                            {
+                                DateTime tmp = Convert.ToDateTime(reader["DateEnd"]);
+                                Debug.WriteLine(tmp.ToString());
+                                if (tmp < DateTime.Now)
+                                    DeleteRecord(SqlConn, Int16.Parse(reader["ID"].ToString()));
+                            }
                         }
                     }
                 }
@@ -118,21 +115,69 @@ namespace TaskOperation
             sqlComm.ExecuteNonQuery();
             Debug.WriteLine($"DELETED ROW  WHERE ID => {ID}");
         }
+        
+        public static void DeleteRecord(DataGridView dataGrid)
+        {
+            if (dataGrid.SelectedCells.Count != 0)
+            {
+                var ID = dataGrid.CurrentRow.Cells[0].Value.ToString();
+                string delQueryByID = $"DELETE FROM TaskCurrent WHERE ID={ID};";
+                using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
+                {
+                    SqlConn.Open();
+                    SQLiteCommand sqlComm = new SQLiteCommand(delQueryByID, SqlConn);
+                    sqlComm.ExecuteNonQuery();
+                    Debug.WriteLine($"DELETED ROW  WHERE ID => {ID}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Смена статуса
+        /// </summary>
+        /// <param name="sqlConn"></param>
+        /// <param name="ID"></param>
+        public static void RevertStatusRecord(SQLiteConnection sqlConn, int ID)
+        {
+
+        }
 
         /// <summary>
         /// Кастомизация таблицы и переименование колонок таблицы
         /// </summary>
         private static void CustomTableColumn()
         {
+            //gridView.Columns["ID"].Visible = false;
+
             gridView.Columns["TitleTask"].HeaderText = "Задача";
             gridView.Columns["TitleTask"].Width = 70;
+
             gridView.Columns["TextTask"].HeaderText = "Описание";
             gridView.Columns["TextTask"].Width = 320;
+
             gridView.Columns["DateCreated"].HeaderText = "Дата создания";
             gridView.Columns["DateCreated"].Width = 120;
+
             gridView.Columns["DateEnd"].HeaderText = "Дата окончания";
             gridView.Columns["DateEnd"].Width = 120;
 
+            gridView.Columns["Status"].Visible = false;
+        }
+
+        public static void CreateTask(TableTaskCurrent tasker)
+        {
+            using (SqlConn = new SQLiteConnection($"Data Source={fileDB};Version=3;"))
+            {
+                SqlConn.Open();
+                SQLiteCommand sqlComm = new SQLiteCommand();
+                sqlComm.Connection = SqlConn;
+                sqlComm.CommandText = $"INSERT INTO TaskCurrent (TitleTask, TextTask, DateCreated, DateEnd, Status) " +
+                    $"VALUES ('{tasker.TitleTask}', '{tasker.TextTask}', '{DateTime.Now.ToString()}', '{tasker.DateEnd.ToString()}', 1);";
+                sqlComm.ExecuteNonQuery();
+                Debug.WriteLine("EXECUTE QUERY =>\t" + $"INSERT INTO TaskCurrent (TitleTask, TextTask, DateCreated, DateEnd, Status)" +
+                    $" VALUES ({tasker.TitleTask}, {tasker.TextTask}, {DateTime.Now.ToString()}, {tasker.DateEnd.ToString()}, 1);");
+            }
+            UpdateTable();
         }
 
         /// <summary>
@@ -146,41 +191,17 @@ namespace TaskOperation
                 await using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
                 {
                     SqlConn.Open();
-                    SQLiteCommand sqlComm = new SQLiteCommand(selectViewData, SqlConn);
-                    sqlComm.ExecuteNonQuery();
-
-                    var dataTable = new DataTable("TaskCurrent");
-                    sqlAdapter = new SQLiteDataAdapter(sqlComm);
-                    sqlAdapter.Fill(dataTable);
-                    gridView.DataSource = dataTable.DefaultView;
-                    sqlAdapter.Update(dataTable);
-                    CustomTableColumn();
-                }
-            }
-        }
-
-
-
-        public static void CreateTask(TableTaskCurrent tasker)
-        {
-            var newTask = tasker;
-            if (CheckDbFile())
-            {
-                using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
-                {
-                    SqlConn.Open();
                     SQLiteCommand sqlComm = new SQLiteCommand(selectAllData, SqlConn);
                     sqlComm.ExecuteNonQuery();
 
                     var dataTable = new DataTable("TaskCurrent");
                     sqlAdapter = new SQLiteDataAdapter(sqlComm);
                     sqlAdapter.Fill(dataTable);
-                    //gridView.ItemsSource = dataTable.DefaultView;
                     gridView.DataSource = dataTable.DefaultView;
                     sqlAdapter.Update(dataTable);
                 }
             }
+            CustomTableColumn();
         }
-
     }
 }

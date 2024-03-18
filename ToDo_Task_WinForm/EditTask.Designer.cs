@@ -1,6 +1,6 @@
 ﻿namespace ToDo_Task_WinForm
 {
-    partial class CreateTaskWindow
+    partial class EditTaskWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -84,11 +84,10 @@
             button_CreateTask.Name = "button_CreateTask";
             button_CreateTask.Size = new Size(303, 23);
             button_CreateTask.TabIndex = 4;
-            button_CreateTask.Text = "Создать задачу";
+            button_CreateTask.Text = "Редактировать задачу";
             button_CreateTask.UseVisualStyleBackColor = true;
-            button_CreateTask.Click += button_CreateTask_Click;
             // 
-            // CreateTaskWindow
+            // EditTaskWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -99,9 +98,8 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(textBox_TileTask);
-            Name = "CreateTaskWindow";
-            Text = "Создать задачу";
-            Load += CreateTaskWindow_Load;
+            Name = "EditTaskWindow";
+            Text = "Редактировать задачу";
             ResumeLayout(false);
             PerformLayout();
         }

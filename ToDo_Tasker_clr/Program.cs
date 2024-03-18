@@ -105,6 +105,7 @@ namespace ToDo_Tasker_clr
         public string NameTask { get; private set; }
         public DateTime EndDate { get; private set; }
         private System.Timers.Timer Timer;
+
         //private List<TaskClass> Cls;
 
         //public CreateTask(List<TaskClass> cls)

@@ -10,7 +10,7 @@ namespace ToDo_Tasker_clr
     {
         public static string table_name { get; } = "TaskCurrent";
 
-        public string ID { get; set; }
+        public string? ID { get; set; }
         public string TitleTask { get; set; }
         public string TextTask { get; set; }
         public DateTime DateCreate { get; set; }
