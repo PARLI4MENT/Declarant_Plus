@@ -37,9 +37,11 @@
             button_DeleteTask = new Button();
             button_EditTask = new Button();
             button_CreateTask = new Button();
+            tableTaskCurrentBindingSource = new BindingSource(components);
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView_Main).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)tableTaskCurrentBindingSource).BeginInit();
             SuspendLayout();
             // 
             // notifyIcon1
@@ -64,6 +66,8 @@
             // 
             // dataGridView_Main
             // 
+            dataGridView_Main.AllowUserToOrderColumns = true;
+            dataGridView_Main.BackgroundColor = SystemColors.ButtonFace;
             dataGridView_Main.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_Main.Dock = DockStyle.Fill;
             dataGridView_Main.Location = new Point(123, 3);
@@ -127,6 +131,10 @@
             button_CreateTask.UseVisualStyleBackColor = true;
             button_CreateTask.Click += button_CreateTask_Click;
             // 
+            // tableTaskCurrentBindingSource
+            // 
+            tableTaskCurrentBindingSource.DataSource = typeof(Classes.TableTaskCurrent);
+            // 
             // ToDo_Tasker
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -139,6 +147,7 @@
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView_Main).EndInit();
             panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)tableTaskCurrentBindingSource).EndInit();
             ResumeLayout(false);
         }
 
@@ -152,5 +161,6 @@
         private Button button_EditTask;
         private Button button_CreateTask;
         private Button button_DeleteTask;
+        private BindingSource tableTaskCurrentBindingSource;
     }
 }

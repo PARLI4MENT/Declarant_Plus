@@ -8,7 +8,7 @@ namespace ToDo_Task_WinForm
 {
     public partial class ToDo_Tasker : Form
     {
-        private Tasker tasker;
+        private ToDoTasker tasker;
 
         public ToDo_Tasker()
         {
@@ -37,28 +37,10 @@ namespace ToDo_Task_WinForm
             }
         }
 
-        private void LoadDB()
-        {
-            using (sqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
-            {
-                this.sqlConn.Open();
-                this.sqlComm = sqlConn.CreateCommand();
-                this.sqlComm.CommandText = standartQuery;
-
-                sqlDataAdapter = new SQLiteDataAdapter(standartQuery, this.sqlConn);
-                dataSet.Reset();
-                sqlDataAdapter.Fill(dataSet);
-                dataTable = dataSet.Tables[0];
-                dataGridView_Main.DataSource = dataTable;
-
-            }
-
-        }
-
         private void ToDo_Tasker_Load(object sender, EventArgs e)
         {
-            tasker = new Tasker(dataGridView_Main);
-            Tasker.OpenDB();
+            tasker = new ToDoTasker(dataGridView_Main);
+            ToDoTasker.OpenDB();
         }
 
         private void button_CreateTask_Click(object sender, EventArgs e)
@@ -78,7 +60,7 @@ namespace ToDo_Task_WinForm
 
         private void button_Update_Click(object sender, EventArgs e)
         {
-            
+            ToDoTasker.UpdateTable();
         }
     }
 }
