@@ -2,7 +2,9 @@
 using System.Data;
 using ToDo_Task_WinForm.Classes;
 using System.Diagnostics;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using Microsoft.Toolkit.Uwp.Notifications;
+using System.Timers;
+
 
 namespace TaskOperation
 {
@@ -20,14 +22,20 @@ namespace TaskOperation
         public ToDoTasker()
         {
             SqlConn = new SQLiteConnection();
-            CheckOverdueTask();
+            if (CheckDbFile())
+                CheckOverdueTask();
+            else
+                CreateNewDb();
         }
 
         public ToDoTasker(DataGridView dataGrid)
         {
             SqlConn = new SQLiteConnection();
             gridView = dataGrid;
-            CheckOverdueTask();
+            if (CheckDbFile())
+                CheckOverdueTask();
+            else
+                CreateNewDb();
         }
 
         public static void CreateNewDb()
@@ -48,6 +56,9 @@ namespace TaskOperation
             }
         }
 
+        /// <summary>
+        /// Открытие файла БД и проверка задач на "просроченность по дате" 
+        /// </summary>
         public static void OpenDB()
         {
             if (CheckDbFile())
@@ -68,6 +79,10 @@ namespace TaskOperation
             }
         }
 
+        /// <summary>
+        /// Проверка на существование файла бд SQLite
+        /// </summary>
+        /// <returns></returns>
         private static bool CheckDbFile()
         {
             if (!File.Exists(fileDB))
@@ -95,12 +110,30 @@ namespace TaskOperation
                                 DateTime tmp = Convert.ToDateTime(reader["DateEnd"]);
                                 Debug.WriteLine(tmp.ToString());
                                 if (tmp < DateTime.Now)
+                                {
+                                    ShowNotify($"Задача {reader["TitleTask"].ToString()}  была удалена из-за просроченности",
+                                        reader["TextTask"].ToString(), Convert.ToDateTime(reader["DateEnd"]));
                                     DeleteRecord(SqlConn, Int16.Parse(reader["ID"].ToString()));
+                                }
                             }
                         }
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Вывод всплывающих уведомлений
+        /// </summary>
+        /// <param name="Title"></param>
+        /// <param name="Message"></param>
+        /// <param name="endDate"></param>
+        private static void ShowNotify(string Title, string Message, DateTime endDate)
+        {
+            var notify = new ToastContentBuilder();
+            notify.AddText(Title, AdaptiveTextStyle.Title);
+            notify.AddText(Message + endDate.ToString(), AdaptiveTextStyle.Default);
+            notify.Show();
         }
 
         /// <summary>

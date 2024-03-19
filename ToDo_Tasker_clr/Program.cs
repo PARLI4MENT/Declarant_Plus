@@ -100,7 +100,7 @@ namespace ToDo_Tasker_clr
             this.EndDate = EndDate;
         }
     }
-    public class CreateTask
+    public class CreateReminder
     {
         public string NameTask { get; private set; }
         public DateTime EndDate { get; private set; }
@@ -118,7 +118,7 @@ namespace ToDo_Tasker_clr
         //    }
         //}
 
-        public CreateTask()
+        public CreateReminder()
         {
             Timer = new System.Timers.Timer();
             Timer.Interval = 1000;
@@ -127,7 +127,7 @@ namespace ToDo_Tasker_clr
             Timer.AutoReset = true;
             Timer.Enabled = true;
         }
-        public CreateTask(string NameTask, DateTime EndDate)
+        public CreateReminder(string NameTask, DateTime EndDate)
         {
             this.NameTask= NameTask;
             this.EndDate = EndDate;
@@ -191,10 +191,10 @@ namespace ToDo_Tasker_clr
             dateEnd4 = dateEnd3.AddMinutes(3);
             cls.Add(new TaskClass("Task 4", dateEnd4));
 
-            var task1 = new CreateTask("Task 1", dateEnd1);
-            var task2 = new CreateTask("Task 2", dateEnd2);
-            var task3 = new CreateTask("Task 3", dateEnd3);
-            var task4 = new CreateTask("Task 4", dateEnd4);
+            var task1 = new CreateReminder("Task 1", dateEnd1);
+            var task2 = new CreateReminder("Task 2", dateEnd2);
+            var task3 = new CreateReminder("Task 3", dateEnd3);
+            var task4 = new CreateReminder("Task 4", dateEnd4);
 
             //CreateTask createTask = new CreateTask(cls);
 

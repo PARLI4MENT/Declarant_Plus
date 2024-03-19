@@ -37,16 +37,16 @@
             button_DeleteTask = new Button();
             button_EditTask = new Button();
             button_CreateTask = new Button();
-            tableTaskCurrentBindingSource = new BindingSource(components);
+            toolTip1 = new ToolTip(components);
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView_Main).BeginInit();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)tableTaskCurrentBindingSource).BeginInit();
             SuspendLayout();
             // 
             // notifyIcon1
             // 
-            notifyIcon1.Text = "notifyIcon1";
+            notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+            notifyIcon1.Text = "ToDo-Tasker";
             notifyIcon1.Visible = true;
             // 
             // tableLayoutPanel1
@@ -131,10 +131,6 @@
             button_CreateTask.UseVisualStyleBackColor = true;
             button_CreateTask.Click += button_CreateTask_Click;
             // 
-            // tableTaskCurrentBindingSource
-            // 
-            tableTaskCurrentBindingSource.DataSource = typeof(Classes.TableTaskCurrent);
-            // 
             // ToDo_Tasker
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -147,7 +143,6 @@
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView_Main).EndInit();
             panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)tableTaskCurrentBindingSource).EndInit();
             ResumeLayout(false);
         }
 
@@ -161,6 +156,6 @@
         private Button button_EditTask;
         private Button button_CreateTask;
         private Button button_DeleteTask;
-        private BindingSource tableTaskCurrentBindingSource;
+        private ToolTip toolTip1;
     }
 }
