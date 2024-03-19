@@ -171,37 +171,23 @@ namespace ToDo_Tasker_clr
 
         static void Main(string[] args)
         {
-            Console.WriteLine($"Текущее ВРЕМЯ => {DateTime.Now}");
-            //timers = new List<System.Timers.Timer>();
-            List<TaskClass> cls = new List<TaskClass>();
-
-            DateTime dateEnd1 = DateTime.Now;
-            dateEnd1 = dateEnd1.AddSeconds(30);
-            cls.Add(new TaskClass("Task 1", dateEnd1));
-
-            DateTime dateEnd2 = DateTime.Now;
-            dateEnd2 = dateEnd2.AddMinutes(1);
-            cls.Add(new TaskClass("Task 2", dateEnd2));
-
-            DateTime dateEnd3 = DateTime.Now;
-            dateEnd3 = dateEnd3.AddMinutes(2);
-            cls.Add(new TaskClass("Task 3", dateEnd3));
-
-            DateTime dateEnd4 = DateTime.Now;
-            dateEnd4 = dateEnd3.AddMinutes(3);
-            cls.Add(new TaskClass("Task 4", dateEnd4));
-
-            var task1 = new CreateReminder("Task 1", dateEnd1);
-            var task2 = new CreateReminder("Task 2", dateEnd2);
-            var task3 = new CreateReminder("Task 3", dateEnd3);
-            var task4 = new CreateReminder("Task 4", dateEnd4);
-
-            //CreateTask createTask = new CreateTask(cls);
-
-
+            string substruct = "0:05:00";
+            var periodTo = new DateTime(2017, 10, 5, 12, 30, 0);
+            var periodFrom = new DateTime(2017, 10, 5, 12, 25, 0);
 
             Console.WriteLine();
 
+            if (periodFrom.Date == periodTo.Date)
+            {
+                TimeSpan interval = periodTo - periodFrom;
+                if (interval.Hours <= 0 && interval.Minutes <= 5)
+                {
+                    Console.WriteLine("Готово");
+                }
+                else Console.WriteLine("Разница больше");
+            }
+
+            Console.WriteLine();
             Console.ReadKey();
         }
     }

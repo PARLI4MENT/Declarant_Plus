@@ -21,16 +21,6 @@ namespace TaskOperation
         //private static List<NotifyReminder> notifyReminders;
         private static Timer timer;
 
-        public ToDoTasker()
-        {
-            SqlConn = new SQLiteConnection();
-            if (CheckDbFile())
-                CheckOverdueTask();
-            else
-                CreateNewDb();
-            OpenDB();
-        }
-
         public ToDoTasker(DataGridView dataGrid)
         {
             SqlConn = new SQLiteConnection();
@@ -40,11 +30,13 @@ namespace TaskOperation
             else
                 CreateNewDb();
             OpenDB();
+            SetTimer();
+            CheckDateEnd();
         }
 
         private static void SetTimer()
         {
-            timer = new Timer();
+            timer = new Timer(1000);
             timer.Elapsed += TimerOnElipsed;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -53,6 +45,48 @@ namespace TaskOperation
         private static void TimerOnElipsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             Debug.WriteLine($"Timer {e.SignalTime}");
+            CheckDateEnd();
+            UpdateTable();
+        }
+
+        /// <summary>
+        /// Костыльный вариант узнать разницу 
+        /// </summary>
+        private static void CheckDateEnd()
+        {
+            try
+            {
+                using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
+                {
+                    SqlConn.Open();
+                    string command = "SELECT * FROM TaskCurrent WHERE Status = 1 ORDER BY DateEnd";
+                    SQLiteCommand sqlCommand = new SQLiteCommand(command, SqlConn);
+                    using (SQLiteDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                if (reader["DateEnd"].ToString() != string.Empty)
+                                {
+                                    var dateEnd = Convert.ToDateTime(reader["DateEnd"].ToString());
+                                    var substruct = dateEnd.Subtract(DateTime.Now);
+                                    if(DateTime.Now.Date == dateEnd.Date)
+                                    {
+                                        TimeSpan interval = dateEnd - DateTime.Now;
+                                        if (interval.Hours <= 0 && interval.Minutes <= 5)
+                                            ShowNotify(reader["TitleTask"].ToString(), reader["TextTask"].ToString(), DateTime.Parse(reader["DateEnd"].ToString()));
+
+                                        int id = Int16.Parse(reader["ID"].ToString());
+                                        DeleteRecord(SqlConn, id);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
         }
 
         /// <summary>
@@ -95,49 +129,47 @@ namespace TaskOperation
                     gridView.DataSource = dataTable.DefaultView;
                     sqlAdapter.Update(dataTable);
                     CustomTableColumn();
-                    SetReminds();
                 }
             }
         }
 
-        private static void SetReminds()
-        {
-            /*
-            //if (notifyReminders != null)
-            //{
-            //    if (notifyReminders.Count > 0)
-            //    {
-            //        Debug.WriteLine("############ STOP ALL TIMERS ############");
-            //        foreach (var rem in notifyReminders)
-            //        {
-            //            rem.StopTimer();
-            //        }
-            //    }
-            //    using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
-            //    {
-            //        SqlConn.Open();
-            //        string command = "SELECT ID, DateEnd FROM TaskCurrent WHERE Status = 1 ORDER BY DateEnd";
-            //        SQLiteCommand sqlComm = new SQLiteCommand(command, SqlConn);
-            //        using (SQLiteDataReader reader = sqlComm.ExecuteReader())
-            //        {
-            //            if (reader.HasRows)
-            //            {
-            //                notifyReminders = new List<NotifyReminder>();
-            //                while (reader.Read())
-            //                {
-            //                    int _id = Int16.Parse(reader["ID"].ToString());
-            //                    DateTime _endDate = Convert.ToDateTime(reader["DateEnd"]);
-            //                    notifyReminders.Add(new NotifyReminder(_id, _endDate));
-            //                }
-            //            }
-            //            else return;
-            //        }
-            //    }
-            //}
-            */
+        //private static void SetReminds()
+        //{
+        //    /*
+        //    //if (notifyReminders != null)
+        //    //{
+        //    //    if (notifyReminders.Count > 0)
+        //    //    {
+        //    //        Debug.WriteLine("############ STOP ALL TIMERS ############");
+        //    //        foreach (var rem in notifyReminders)
+        //    //        {
+        //    //            rem.StopTimer();
+        //    //        }
+        //    //    }
+        //    //    using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
+        //    //    {
+        //    //        SqlConn.Open();
+        //    //        string command = "SELECT ID, DateEnd FROM TaskCurrent WHERE Status = 1 ORDER BY DateEnd";
+        //    //        SQLiteCommand sqlComm = new SQLiteCommand(command, SqlConn);
+        //    //        using (SQLiteDataReader reader = sqlComm.ExecuteReader())
+        //    //        {
+        //    //            if (reader.HasRows)
+        //    //            {
+        //    //                notifyReminders = new List<NotifyReminder>();
+        //    //                while (reader.Read())
+        //    //                {
+        //    //                    int _id = Int16.Parse(reader["ID"].ToString());
+        //    //                    DateTime _endDate = Convert.ToDateTime(reader["DateEnd"]);
+        //    //                    notifyReminders.Add(new NotifyReminder(_id, _endDate));
+        //    //                }
+        //    //            }
+        //    //            else return;
+        //    //        }
+        //    //    }
+        //    //}
+        //    */
 
-
-        }
+        //}
 
         /// <summary>
         /// Проверка на существование файла бд SQLite
@@ -195,6 +227,8 @@ namespace TaskOperation
             notify.AddText($"{Message}\nДата: {endDate.ToString()}", AdaptiveTextStyle.Default);
             notify.Show();
         }
+
+
 
         /// <summary>
         /// Удаление записей из таблицы по "ID"
@@ -296,6 +330,10 @@ namespace TaskOperation
             CustomTableColumn();
         }
 
+        /// <summary>
+        /// Обновление записи в таблице
+        /// </summary>
+        /// <param name="tasker"></param>
         public async static void UpdateTask(TableTaskCurrent tasker)
         {
             using (SqlConn = new SQLiteConnection($"Data Source={fileDB};Version=3;"))
