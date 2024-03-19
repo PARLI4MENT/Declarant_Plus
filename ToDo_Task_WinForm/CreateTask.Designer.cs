@@ -101,7 +101,6 @@
             Controls.Add(textBox_TileTask);
             Name = "CreateTaskWindow";
             Text = "Создать задачу";
-            Load += CreateTaskWindow_Load;
             ResumeLayout(false);
             PerformLayout();
         }

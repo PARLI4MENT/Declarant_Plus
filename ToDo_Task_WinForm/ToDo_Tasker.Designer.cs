@@ -38,6 +38,7 @@
             button_EditTask = new Button();
             button_CreateTask = new Button();
             toolTip1 = new ToolTip(components);
+            label_CurrentRemind = new Label();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView_Main).BeginInit();
             panel1.SuspendLayout();
@@ -78,6 +79,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label_CurrentRemind);
             panel1.Controls.Add(button_Update);
             panel1.Controls.Add(button_DeleteTask);
             panel1.Controls.Add(button_EditTask);
@@ -131,6 +133,14 @@
             button_CreateTask.UseVisualStyleBackColor = true;
             button_CreateTask.Click += button_CreateTask_Click;
             // 
+            // label_CurrentRemind
+            // 
+            label_CurrentRemind.AutoSize = true;
+            label_CurrentRemind.Location = new Point(9, 385);
+            label_CurrentRemind.Name = "label_CurrentRemind";
+            label_CurrentRemind.Size = new Size(0, 15);
+            label_CurrentRemind.TabIndex = 2;
+            // 
             // ToDo_Tasker
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -143,6 +153,7 @@
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView_Main).EndInit();
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -157,5 +168,6 @@
         private Button button_CreateTask;
         private Button button_DeleteTask;
         private ToolTip toolTip1;
+        private Label label_CurrentRemind;
     }
 }

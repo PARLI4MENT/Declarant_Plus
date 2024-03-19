@@ -29,7 +29,6 @@ namespace ToDo_Task_WinForm
         private void ToDo_Tasker_Load(object sender, EventArgs e)
         {
             tasker = new ToDoTasker(dataGridView_Main);
-            ToDoTasker.OpenDB();
         }
 
         private void button_CreateTask_Click(object sender, EventArgs e)
@@ -40,14 +39,23 @@ namespace ToDo_Task_WinForm
 
         private void button_EditTask_Click(object sender, EventArgs e)
         {
-            EditTaskWindow editTaskWindow = new EditTaskWindow(dataGridView_Main);
-            editTaskWindow.ShowDialog();
+            if (dataGridView_Main.CurrentRow != null)
+            {
+                EditTaskWindow editTaskWindow = new EditTaskWindow(dataGridView_Main);
+                editTaskWindow.ShowDialog();
+            }
+            else
+                MessageBox.Show("Выберите строку для редактирования");
         }
 
         private void button_DeleteTask_Click(object sender, EventArgs e)
         {
-
-            ToDoTasker.DeleteRecord(dataGridView_Main);
+            if (dataGridView_Main.CurrentRow != null)
+            {
+                ToDoTasker.DeleteRecord(dataGridView_Main);
+            }
+            else
+                MessageBox.Show("Выберите строку для удаления");
         }
 
         private void button_Update_Click(object sender, EventArgs e)

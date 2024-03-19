@@ -44,19 +44,20 @@ namespace ToDo_Task_WinForm
 
         private void BindData(DataGridView dataGridView)
         {
-            if (dataGridView.SelectedCells.Count != 0)
-            {
-                taskCurrent.ID = dataGridView.CurrentRow.Cells[0].Value.ToString();
-                
-                // Заголовок задачи
-                if(dataGridView.CurrentRow.Cells[1].Value.ToString() != string.Empty)
-                    textBox_TileTask.Text = dataGridView.CurrentRow.Cells[1].Value.ToString();
-                // Описание задачи
-                if(dataGridView.CurrentRow.Cells[2].Value.ToString() != string.Empty)
-                    richTextBox_TextTask.Text = dataGridView.CurrentRow.Cells[2].Value.ToString();
-                // End date
-                dateTimePicker_DateEnd.Value = Convert.ToDateTime(dataGridView.CurrentRow.Cells[4].Value);
-            }
+            if (dataGridView.CurrentRow != null)
+                if (dataGridView.SelectedCells.Count != 0)
+                {
+                    taskCurrent.ID = dataGridView.CurrentRow.Cells[0].Value.ToString();
+
+                    // Заголовок задачи
+                    if (dataGridView.CurrentRow.Cells[1].Value.ToString() != string.Empty)
+                        textBox_TileTask.Text = dataGridView.CurrentRow.Cells[1].Value.ToString();
+                    // Описание задачи
+                    if (dataGridView.CurrentRow.Cells[2].Value.ToString() != string.Empty)
+                        richTextBox_TextTask.Text = dataGridView.CurrentRow.Cells[2].Value.ToString();
+                    // End date
+                    dateTimePicker_DateEnd.Value = Convert.ToDateTime(dataGridView.CurrentRow.Cells[4].Value);
+                }
         }
 
     }

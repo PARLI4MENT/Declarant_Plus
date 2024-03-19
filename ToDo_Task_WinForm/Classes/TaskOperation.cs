@@ -3,12 +3,12 @@ using System.Data;
 using ToDo_Task_WinForm.Classes;
 using System.Diagnostics;
 using Microsoft.Toolkit.Uwp.Notifications;
-using System.Timers;
+using Timer = System.Timers.Timer;
 
 
 namespace TaskOperation
 {
-    internal class ToDoTasker
+    public class ToDoTasker
     {
         public static SQLiteConnection SqlConn { get; private set; }
         private static SQLiteDataAdapter sqlAdapter;
@@ -16,8 +16,10 @@ namespace TaskOperation
         private static DataGridView gridView { get; set; }
         private static string selectViewData = "SELECT TitleTask, TextTask," +
             "DateCreated, DateEnd FROM TaskCurrent WHERE Status = 1";
-        private static string selectAllData = "SELECT * FROM TaskCurrent WHERE Status = 1";
+        private static string selectAllData = "SELECT * FROM TaskCurrent WHERE Status = 1 ORDER BY DateEnd";
         private static string fileDB = "ToDoBase.db";
+        //private static List<NotifyReminder> notifyReminders;
+        private static Timer timer;
 
         public ToDoTasker()
         {
@@ -26,6 +28,7 @@ namespace TaskOperation
                 CheckOverdueTask();
             else
                 CreateNewDb();
+            OpenDB();
         }
 
         public ToDoTasker(DataGridView dataGrid)
@@ -36,9 +39,26 @@ namespace TaskOperation
                 CheckOverdueTask();
             else
                 CreateNewDb();
+            OpenDB();
         }
 
-        public static void CreateNewDb()
+        private static void SetTimer()
+        {
+            timer = new Timer();
+            timer.Elapsed += TimerOnElipsed;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+        }
+
+        private static void TimerOnElipsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            Debug.WriteLine($"Timer {e.SignalTime}");
+        }
+
+        /// <summary>
+        /// Создание нового пустого файла БД SQLite и инициализация таблицы
+        /// </summary>
+        private void CreateNewDb()
         {
             string appPath = AppDomain.CurrentDomain.BaseDirectory + fileDB;
             SQLiteConnection.CreateFile(appPath);
@@ -59,7 +79,7 @@ namespace TaskOperation
         /// <summary>
         /// Открытие файла БД и проверка задач на "просроченность по дате" 
         /// </summary>
-        public static void OpenDB()
+        private void OpenDB()
         {
             if (CheckDbFile())
             {
@@ -75,8 +95,48 @@ namespace TaskOperation
                     gridView.DataSource = dataTable.DefaultView;
                     sqlAdapter.Update(dataTable);
                     CustomTableColumn();
+                    SetReminds();
                 }
             }
+        }
+
+        private static void SetReminds()
+        {
+            /*
+            //if (notifyReminders != null)
+            //{
+            //    if (notifyReminders.Count > 0)
+            //    {
+            //        Debug.WriteLine("############ STOP ALL TIMERS ############");
+            //        foreach (var rem in notifyReminders)
+            //        {
+            //            rem.StopTimer();
+            //        }
+            //    }
+            //    using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
+            //    {
+            //        SqlConn.Open();
+            //        string command = "SELECT ID, DateEnd FROM TaskCurrent WHERE Status = 1 ORDER BY DateEnd";
+            //        SQLiteCommand sqlComm = new SQLiteCommand(command, SqlConn);
+            //        using (SQLiteDataReader reader = sqlComm.ExecuteReader())
+            //        {
+            //            if (reader.HasRows)
+            //            {
+            //                notifyReminders = new List<NotifyReminder>();
+            //                while (reader.Read())
+            //                {
+            //                    int _id = Int16.Parse(reader["ID"].ToString());
+            //                    DateTime _endDate = Convert.ToDateTime(reader["DateEnd"]);
+            //                    notifyReminders.Add(new NotifyReminder(_id, _endDate));
+            //                }
+            //            }
+            //            else return;
+            //        }
+            //    }
+            //}
+            */
+
+
         }
 
         /// <summary>
@@ -93,7 +153,7 @@ namespace TaskOperation
         /// <summary>
         /// Проверка задач из БД на "просроченность по дате"
         /// </summary>
-        private static void CheckOverdueTask()
+        private void CheckOverdueTask()
         {
             using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
             {
@@ -111,7 +171,7 @@ namespace TaskOperation
                                 Debug.WriteLine(tmp.ToString());
                                 if (tmp < DateTime.Now)
                                 {
-                                    ShowNotify($"Задача {reader["TitleTask"].ToString()}  была удалена из-за просроченности",
+                                    ShowNotify($"Задача {reader["TitleTask"].ToString()} была удалена из-за просроченности",
                                         reader["TextTask"].ToString(), Convert.ToDateTime(reader["DateEnd"]));
                                     DeleteRecord(SqlConn, Int16.Parse(reader["ID"].ToString()));
                                 }
@@ -128,11 +188,11 @@ namespace TaskOperation
         /// <param name="Title"></param>
         /// <param name="Message"></param>
         /// <param name="endDate"></param>
-        private static void ShowNotify(string Title, string Message, DateTime endDate)
+        public static void ShowNotify(string Title, string Message, DateTime endDate)
         {
             var notify = new ToastContentBuilder();
             notify.AddText(Title, AdaptiveTextStyle.Title);
-            notify.AddText(Message + endDate.ToString(), AdaptiveTextStyle.Default);
+            notify.AddText($"{Message}\nДата: {endDate.ToString()}", AdaptiveTextStyle.Default);
             notify.Show();
         }
 
@@ -148,7 +208,11 @@ namespace TaskOperation
             sqlComm.ExecuteNonQuery();
             Debug.WriteLine($"DELETED ROW  WHERE ID => {ID}");
         }
-        
+
+        /// <summary>
+        /// Удаление записи по выделенной области DataGrid
+        /// </summary>
+        /// <param name="dataGrid"></param>
         public static void DeleteRecord(DataGridView dataGrid)
         {
             if (dataGrid.SelectedCells.Count != 0)
@@ -164,16 +228,6 @@ namespace TaskOperation
                     UpdateTable();
                 }
             }
-        }
-
-        /// <summary>
-        /// Смена статуса
-        /// </summary>
-        /// <param name="sqlConn"></param>
-        /// <param name="ID"></param>
-        public static void RevertStatusRecord(SQLiteConnection sqlConn, int ID)
-        {
-
         }
 
         /// <summary>
@@ -198,6 +252,10 @@ namespace TaskOperation
             gridView.Columns["Status"].Visible = false;
         }
 
+        /// <summary>
+        /// Создания задачи и оправка запроса на содание записи в БД SQLite
+        /// </summary>
+        /// <param name="tasker"></param>
         public static void CreateTask(TableTaskCurrent tasker)
         {
             using (SqlConn = new SQLiteConnection($"Data Source={fileDB};Version=3;"))

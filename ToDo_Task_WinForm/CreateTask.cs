@@ -46,7 +46,6 @@ namespace ToDo_Task_WinForm
             return true;
         }
 
-
         /// <summary>
         /// Присваивание данные из полей формы к экземпляру класса
         /// </summary>
@@ -68,11 +67,6 @@ namespace ToDo_Task_WinForm
         public static DateTime SetZeroSecond(DateTime dateTime)
         {
             return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0);
-        }
-
-        private void CreateTaskWindow_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
