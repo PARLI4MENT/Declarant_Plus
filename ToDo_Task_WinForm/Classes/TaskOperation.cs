@@ -5,7 +5,6 @@ using System.Diagnostics;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Timer = System.Timers.Timer;
 
-
 namespace TaskOperation
 {
     public class ToDoTasker
@@ -46,7 +45,7 @@ namespace TaskOperation
         {
             Debug.WriteLine($"Timer {e.SignalTime}");
             CheckDateEnd();
-            UpdateTable();
+            //UpdateTable();
         }
 
         /// <summary>
@@ -70,19 +69,26 @@ namespace TaskOperation
                                 if (reader["DateEnd"].ToString() != string.Empty)
                                 {
                                     var dateEnd = Convert.ToDateTime(reader["DateEnd"].ToString());
-                                    var substruct = dateEnd.Subtract(DateTime.Now);
+                                    //var substruct = dateEnd.Subtract(DateTime.Now);
                                     if(DateTime.Now.Date == dateEnd.Date)
                                     {
                                         TimeSpan interval = dateEnd - DateTime.Now;
                                         if (interval.Hours <= 0 && interval.Minutes <= 5)
-                                            ShowNotify(reader["TitleTask"].ToString(), reader["TextTask"].ToString(), DateTime.Parse(reader["DateEnd"].ToString()));
+                                        {
+                                            ShowNotify($"Дедлайн задачи =>{reader["TitleTask"].ToString()}", reader["TextTask"].ToString(), DateTime.Parse(reader["DateEnd"].ToString()));
 
-                                        int id = Int16.Parse(reader["ID"].ToString());
-                                        DeleteRecord(SqlConn, id);
+                                            int id = Int16.Parse(reader["ID"].ToString());
+                                            DeleteRecord(SqlConn, id);
+                                        }
+                                        return;
                                     }
+                                    return;
                                 }
+                                return;
                             }
+                            return;
                         }
+                        return;
                     }
                 }
             }
@@ -228,7 +234,8 @@ namespace TaskOperation
             notify.Show();
         }
 
-
+        /* Тут делегат сделать DeleteRecord*/
+        //public delegate void DeleteRecord(SQLiteConnection sqlCon, int Id);
 
         /// <summary>
         /// Удаление записей из таблицы по "ID"

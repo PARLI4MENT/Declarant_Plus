@@ -25,7 +25,7 @@ namespace ToDo_Task_WinForm
             var tmp = Convert.ToDateTime(dateTimePicker_DateEnd.Text);
 
             if (!CheckEmptyField())
-                MessageBox.Show("FALSE");
+                MessageBox.Show("Не все поля заполнены");
             else
             {
                 BindData(tasker);
