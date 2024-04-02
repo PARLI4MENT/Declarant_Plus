@@ -79,6 +79,10 @@ namespace TaskOperation
 
                                             int id = Int16.Parse(reader["ID"].ToString());
                                             DeleteRecord(SqlConn, id);
+
+                                            //ToDoTasker.RefreshDataTable refData = new(UpdateTable);
+                                            UpdateTable();
+
                                         }
                                         return;
                                     }
@@ -276,21 +280,31 @@ namespace TaskOperation
         /// </summary>
         private static void CustomTableColumn()
         {
-            gridView.Columns["ID"].Visible = false;
+            //gridView.Columns["ID"].Visible = false;
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["ID"].Visible = false));
 
-            gridView.Columns["TitleTask"].HeaderText = "Задача";
-            gridView.Columns["TitleTask"].Width = 70;
+            //gridView.Columns["TitleTask"].HeaderText = "Задача";
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["TitleTask"].HeaderText = "Задача"));
+            //gridView.Columns["TitleTask"].Width = 70;
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["TitleTask"].Width = 70));
 
-            gridView.Columns["TextTask"].HeaderText = "Описание";
-            gridView.Columns["TextTask"].Width = 320;
+            //gridView.Columns["TextTask"].HeaderText = "Описание";
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["TextTask"].HeaderText = "Описание"));
+            //gridView.Columns["TextTask"].Width = 320;
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["TextTask"].Width = 320));
 
-            gridView.Columns["DateCreated"].HeaderText = "Дата создания";
-            gridView.Columns["DateCreated"].Width = 120;
+            //gridView.Columns["DateCreated"].HeaderText = "Дата создания";
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["DateCreated"].HeaderText = "Дата создания"));
+            //gridView.Columns["DateCreated"].Width = 120;
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["DateCreated"].Width = 120));
 
-            gridView.Columns["DateEnd"].HeaderText = "Дата окончания";
-            gridView.Columns["DateEnd"].Width = 120;
+            //gridView.Columns["DateEnd"].HeaderText = "Дата окончания";
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["DateEnd"].HeaderText = "Дата окончания"));
+            //gridView.Columns["DateEnd"].Width = 120;
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["DateEnd"].Width = 120));
 
-            gridView.Columns["Status"].Visible = false;
+            //gridView.Columns["Status"].Visible = false;
+            gridView.Invoke((MethodInvoker)(() => gridView.Columns["Status"].Visible = false));
         }
 
         /// <summary>
@@ -313,6 +327,8 @@ namespace TaskOperation
             UpdateTable();
         }
 
+        public delegate void RefreshDataTable();
+
         /// <summary>
         /// Обновление данных таблицы
         /// </summary>
@@ -320,7 +336,8 @@ namespace TaskOperation
         {
             if (CheckDbFile())
             {
-                gridView.DataSource = null;
+                gridView.Invoke((MethodInvoker)(() => gridView.DataSource = null));
+                //gridView.DataSource = null;
                 await using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
                 {
                     SqlConn.Open();
@@ -330,11 +347,11 @@ namespace TaskOperation
                     var dataTable = new DataTable("TaskCurrent");
                     sqlAdapter = new SQLiteDataAdapter(sqlComm);
                     sqlAdapter.Fill(dataTable);
-                    gridView.DataSource = dataTable.DefaultView;
+                    gridView.Invoke((MethodInvoker)(() => gridView.DataSource = dataTable.DefaultView));
+                    //gridView.DataSource = dataTable.DefaultView;
                     sqlAdapter.Update(dataTable);
                 }
             }
-            CustomTableColumn();
         }
 
         /// <summary>
