@@ -1,25 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ToDo_Task
 {
     /// <summary>
     /// Interaction logic for CreateNewTask.xaml
     /// </summary>
+    /// 
+
     public partial class CreateNewTask : Window
     {
+        private double _WWnd;
+        public double WWnd
+        {
+            get => _WWnd;
+            set => _WWnd = value;
+        }
+        private double _HWnd;
+        public double HWnd
+        {
+            get => _HWnd;
+            set => _HWnd = value;
+        }
+
         public CreateNewTask()
         {
             InitializeComponent();
@@ -29,6 +34,20 @@ namespace ToDo_Task
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+    }
+
+    public class MVVM: ObservableRecipient
+    {
+
+        private DateTime _Date = DateTime.Now;
+        public DateTime Date
+        {
+            get => _Date;
+            set
+            {
+                _Date = DateTime.Now;
+            }
         }
     }
 }

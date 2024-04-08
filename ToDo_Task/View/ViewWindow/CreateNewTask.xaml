@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ToDo_Task"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Создать задачу"
+    Title=""
     Width="450"
     Height="800"
     mc:Ignorable="d">
@@ -30,7 +30,7 @@
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Задача" />
-                <TextBox x:Name="txtBox_TitleTas" />
+                <TextBox x:Name="txtBox_TitleTas" Text="{}" />
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Описание" />

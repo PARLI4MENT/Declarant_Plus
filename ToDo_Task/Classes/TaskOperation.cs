@@ -1,11 +1,8 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 using System.IO;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using ToDo_Task.Classes;
 
 namespace TaskOperation
 {
@@ -42,7 +39,7 @@ namespace TaskOperation
                     "DateCreated TEXT," +
                     "DateEnd     TEXT," +
                     "Status      INTEGER NOT NULL DEFAULT (1));";
-                SQLiteCommand cmd = new SQLiteCommand(sqlCmd, SqlConn);
+                var cmd = new SQLiteCommand(sqlCmd, SqlConn);
                 cmd.ExecuteNonQuery();
             }
         }
@@ -53,7 +50,7 @@ namespace TaskOperation
             using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
             {
                 SqlConn.Open();
-                SQLiteCommand sqlComm = new SQLiteCommand(defSelectFrom, SqlConn);
+                var sqlComm = new SQLiteCommand(defSelectFrom, SqlConn);
                 sqlComm.ExecuteNonQuery();
 
                 var dataTable = new DataTable("TaskCurrent");
@@ -79,11 +76,7 @@ namespace TaskOperation
                 sqlAdapter.Update(((DataView)dataGrid.ItemsSource).Table);
             }
         }
-
-        public void CreateTask(SQLiteConnection sqlConnection, SQLiteCommand sqlCommand)
-        {
-
-        }
+        
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using Microsoft.Data.Sqlite;
+using System.Reflection;
 
 namespace ToDo_Tasker_clr
 {
@@ -166,25 +167,68 @@ namespace ToDo_Tasker_clr
     }
 
     internal class Program
+
     {
         private const string? connString = "Data Source=ToDoBase.db;Version=3;";
+        private const string? msConnString = "Data Source=ToDoBase.db";
 
         static void Main(string[] args)
         {
-            string substruct = "0:05:00";
-            var periodTo = new DateTime(2017, 10, 5, 12, 30, 0);
-            var periodFrom = new DateTime(2017, 10, 5, 12, 25, 0);
+            #region _1
+            //string substruct = "0:05:00";
+            //var periodTo = new DateTime(2017, 10, 5, 12, 30, 0);
+            //var periodFrom = new DateTime(2017, 10, 5, 12, 25, 0);
 
-            Console.WriteLine();
+            //Console.WriteLine();
 
-            if (periodFrom.Date == periodTo.Date)
+            //if (periodFrom.Date == periodTo.Date)
+            //{
+            //    TimeSpan interval = periodTo - periodFrom;
+            //    if (interval.Hours <= 0 && interval.Minutes <= 5)
+            //    {
+            //        Console.WriteLine("Готово");
+            //    }
+            //    else Console.WriteLine("Разница больше");
+            //}
+            #endregion
+
+            using (var conn = new SqliteConnection(msConnString))
             {
-                TimeSpan interval = periodTo - periodFrom;
-                if (interval.Hours <= 0 && interval.Minutes <= 5)
+                conn.Open();
+                var comm = new SqliteCommand("SELECT * FROM TaskCurrent", conn);
+                comm.ExecuteNonQuery();
+                
+                using (SqliteDataReader dataReader = comm.ExecuteReader())
                 {
-                    Console.WriteLine("Готово");
+                    if (dataReader.HasRows)
+                    {
+                        var lst = new List<TableTaskCurrent>();
+                        while (dataReader.Read())
+                        {
+                            var id = dataReader.GetValue(0);
+                            var titleTask = dataReader.GetValue(1);
+                            var textTask = dataReader.GetValue(2);
+                            var dateCreated = dataReader.GetValue(3);
+                            var dateEnd = dataReader.GetValue(4);
+                            var status = dataReader.GetValue(5);
+
+                            lst.Add(new TableTaskCurrent
+                            {
+                                ID= id.ToString(),
+                                TitleTask=titleTask.ToString(),
+                                TextTask=textTask.ToString(),
+                                DateCreate = Convert.ToDateTime(dateCreated),
+                                DateEnd = Convert.ToDateTime(dateEnd),
+                                Status = Convert.ToUInt32(status)
+                            });
+                            
+                        }
+
+                        foreach (var item in lst)
+                            Console.WriteLine($"{item.ID}\t{item.TitleTask}\t{item.TextTask}\t{item.DateCreate}\t{item.DateEnd}\t{item.Status}");
+                    }
+
                 }
-                else Console.WriteLine("Разница больше");
             }
 
             Console.WriteLine();

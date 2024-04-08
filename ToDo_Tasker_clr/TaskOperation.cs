@@ -1,11 +1,10 @@
-﻿using System.Data;
-using System.Data.SQLite;
+﻿using Microsoft.Data.Sqlite;
 
 namespace ToDo_Tasker_clr
 {
     internal class TaskOperation
     {
-        public void CreateTask(SQLiteConnection sqlConnection, SQLiteCommand sqlCommand)
+        public void CreateTask(SqliteConnection sqlConnection, SqliteCommand sqlCommand)
         {
 
         }
