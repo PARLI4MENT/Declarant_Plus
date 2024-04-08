@@ -40,9 +40,8 @@ namespace ToDo_Task
 
         private void btn_CreateTask_Click(object sender, RoutedEventArgs e)
         {
-            //CreateNewTask taskWindow = new CreateNewTask();
-            //taskWindow.ShowDialog();
-
+            CreateNewTask taskWindow = new CreateNewTask();
+            taskWindow.ShowDialog();
         }
 
         private void btn_UpdateTable_Click(object sender, RoutedEventArgs e)
