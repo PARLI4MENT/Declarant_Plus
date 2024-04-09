@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
-using System.Globalization;
-using System.Reflection;
+using System.Data.Common;
 
 namespace ToDo_Tasker_clr
 {
@@ -131,7 +130,7 @@ namespace ToDo_Tasker_clr
         }
         public CreateReminder(string NameTask, DateTime EndDate)
         {
-            this.NameTask= NameTask;
+            this.NameTask = NameTask;
             this.EndDate = EndDate;
 
             Timer = new System.Timers.Timer();
@@ -168,10 +167,9 @@ namespace ToDo_Tasker_clr
     }
 
     internal class Program
-
     {
         private const string? connString = "Data Source=ToDoBase.db;Version=3;";
-        private const string? msConnString = "Data Source=ToDoBase.db";
+        private const string? msConnString = "Data Source=chinook.db";
 
         static void Main(string[] args)
         {
@@ -193,58 +191,60 @@ namespace ToDo_Tasker_clr
             //}
             #endregion
 
-            #region _2
-            //using (var conn = new SqliteConnection(msConnString))
-            //{
-            //    conn.Open();
-            //    var comm = new SqliteCommand("SELECT * FROM TaskCurrent", conn);
-            //    comm.ExecuteNonQuery();
+            #region _2 Get Scheme Table from SQLite DB
+            using (var conn = new SqliteConnection(msConnString))
+            {
+                conn.Open();
+                var comm = new SqliteCommand("SELECT * FROM customers", conn);
+                comm.ExecuteNonQuery();
 
-            //    using (SqliteDataReader dataReader = comm.ExecuteReader())
-            //    {
-            //        if (dataReader.HasRows)
-            //        {
-            //            var lst = new List<TableTaskCurrent>();
-            //            while (dataReader.Read())
-            //            {
-            //                var id = dataReader.GetValue(0);
-            //                var titleTask = dataReader.GetValue(1);
-            //                var textTask = dataReader.GetValue(2);
-            //                var dateCreated = dataReader.GetValue(3);
-            //                var dateEnd = dataReader.GetValue(4);
-            //                var status = dataReader.GetValue(5);
+                using (SqliteDataReader dataReader = comm.ExecuteReader())
+                {
+                    if (dataReader.HasRows)
+                    {
+                        foreach (var item in dataReader.GetColumnSchema())
+                        {
+                            Console.WriteLine(item.ColumnName);
+                        }
+                        /*
+                        //var lst = new List<TableTaskCurrent>();
+                        //while (dataReader.Read())
+                        //{
+                        //    var id = dataReader.GetValue(0);
+                        //    var titleTask = dataReader.GetValue(1);
+                        //    var textTask = dataReader.GetValue(2);
+                        //    var dateCreated = dataReader.GetValue(3);
+                        //    var dateEnd = dataReader.GetValue(4);
+                        //    var status = dataReader.GetValue(5);
 
-            //                lst.Add(new TableTaskCurrent
-            //                {
-            //                    ID= id.ToString(),
-            //                    TitleTask=titleTask.ToString(),
-            //                    TextTask=textTask.ToString(),
-            //                    DateCreate = Convert.ToDateTime(dateCreated),
-            //                    DateEnd = Convert.ToDateTime(dateEnd),
-            //                    Status = Convert.ToUInt32(status)
-            //                });
+                        //    lst.Add(new TableTaskCurrent
+                        //    {
+                        //        ID = id.ToString(),
+                        //        TitleTask = titleTask.ToString(),
+                        //        TextTask = textTask.ToString(),
+                        //        DateCreate = Convert.ToDateTime(dateCreated),
+                        //        DateEnd = Convert.ToDateTime(dateEnd),
+                        //        Status = Convert.ToUInt32(status)
+                        //    });
 
-            //            }
+                        //}
 
-            //            foreach (var item in lst)
-            //                Console.WriteLine($"{item.ID}\t{item.TitleTask}\t{item.TextTask}\t{item.DateCreate}\t{item.DateEnd}\t{item.Status}");
-            //        }
-
-            //    }
-            //}
+                        //foreach (var item in lst)
+                        //    Console.WriteLine($"{item.ID}\t{item.TitleTask}\t{item.TextTask}\t{item.DateCreate}\t{item.DateEnd}\t{item.Status}");
+                        */
+                    }
+                }
+            }
             #endregion
 
             #region _3
-            void GetSalary(dynamic value, Type type)
-            {
-                if (value.GetType() == type)
-                {
-                    Console.WriteLine($"TRUE => {value.GetType()} <= {type.ToString()}");
-                }
-            }
-
-
-            GetSalary(1, Int32);
+            //void GetCustomType(dynamic value, Type type)
+            //{
+            //    if (value.GetType() == type)
+            //    {
+            //        Console.WriteLine($"TRUE => {value.GetType()} <= {type.ToString()}");
+            //    }
+            //}
 
             #endregion
 
@@ -254,10 +254,10 @@ namespace ToDo_Tasker_clr
     }
 
     public class Person
-    { 
+    {
         public string Name { get; }
-        public dynamic Age {  get; set; }
-        
+        public dynamic Age { get; set; }
+
         public Person(string name, dynamic age)
         {
             Name = name;

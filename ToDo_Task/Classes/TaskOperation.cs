@@ -1,82 +1,78 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 using System.IO;
 using System.Windows.Controls;
+using ToDo_Task.Classes;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Data.Common;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace TaskOperation
 {
-    internal class Tasker
+    partial class Tasker: ObservableObject
     {
-        public static SQLiteConnection SqlConn { get; private set; }
-        private static SQLiteDataAdapter sqlAdapter;
-        private SQLiteCommand? sqlComm;
-        private static DataGrid gridView {get; set;}
-        private static string defSelectFrom = "SELECT TitleTask, TextTask, DateEnd FROM TaskCurrent";
+        public static SqliteConnection SqlConn { get; private set; }
         private static string fileDB = "ToDoBase.db";
+
+        [ObservableProperty]
+        public static List<TableTaskCurrent>? _CurrentTaskList;
 
         public Tasker()
         {
-            SqlConn = new SQLiteConnection();
+            if(_CurrentTaskList == null)
+                _CurrentTaskList = new List<TableTaskCurrent>();
+            FillList();
         }
 
-        public Tasker(DataGrid dataGrid)
+        private void FillList()
         {
-            SqlConn = new SQLiteConnection();
-            gridView = dataGrid;
-        }
-
-        public static void CreateNewDb()
-        {
-            string appPath = AppDomain.CurrentDomain.BaseDirectory + fileDB;
-            SQLiteConnection.CreateFile(appPath);
-            using (SqlConn = new SQLiteConnection($"Data Source={appPath}; Version = 3;"))
+            using (SqlConn = new SqliteConnection($"Data Source={fileDB};"))
             {
                 SqlConn.Open();
-                string sqlCmd = "CREATE TABLE TaskCurrent (ID INTEGER PRIMARY KEY ON CONFLICT ABORT AUTOINCREMENT NOT NULL," +
-                    "TitleTask   TEXT (0, 20)," +
-                    "TextTask    TEXT," +
-                    "DateCreated TEXT," +
-                    "DateEnd     TEXT," +
-                    "Status      INTEGER NOT NULL DEFAULT (1));";
-                var cmd = new SQLiteCommand(sqlCmd, SqlConn);
-                cmd.ExecuteNonQuery();
+                var comm = new SqliteCommand("SELECT * FROM TaskCurrent", SqlConn);
+                comm.ExecuteNonQuery();
+
+                using (SqliteDataReader dataReader = comm.ExecuteReader())
+                {
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            CurrentTaskList.Add(new TableTaskCurrent
+                            {
+                                ID = dataReader[0].ToString(),
+                                TitleTask = dataReader[1].ToString(),
+                                TextTask = dataReader[2].ToString(),
+                                DateCreate = Convert.ToDateTime(dataReader[3]),
+                                DateEnd = Convert.ToDateTime(dataReader[4]),
+                                Status = UInt16.Parse(dataReader[5].ToString())
+                            });
+                        }
+                    }
+                }
             }
         }
 
-        public static void OpenDB()
-        {
-            if(CheckDbFile(SqlConn))
-            using (SqlConn = new SQLiteConnection($"Data Source = {fileDB}; Version = 3;"))
-            {
-                SqlConn.Open();
-                var sqlComm = new SQLiteCommand(defSelectFrom, SqlConn);
-                sqlComm.ExecuteNonQuery();
 
-                var dataTable = new DataTable("TaskCurrent");
-                sqlAdapter = new SQLiteDataAdapter(sqlComm);
-                sqlAdapter.Fill(dataTable);
-                gridView.ItemsSource = dataTable.DefaultView;
-                sqlAdapter.Update(dataTable);
-            }
-        }
+        //private ICommand _AddTask;
+        //public ICommand AddTask
+        //{ 
+        //    get
+        //    {
+        //        var newTask = new TableTaskCurrent();
 
-        private static bool CheckDbFile(SQLiteConnection sqlConn)
-        {
-            if (!File.Exists(fileDB))
-                return false;
-            return true;
-        }
+        //        if(ToDo_Task.CreateNewTask)
 
-        private void UpdateTable(object sender)
-        {
-            if (sender is DataGrid)
-            {
-                var dataGrid = sender as DataGrid;
-                sqlAdapter.Update(((DataView)dataGrid.ItemsSource).Table);
-            }
-        }
-        
+        //        return _AddTask ?? (_AddTask = new RelayCommand(() =>
+        //        {
+        //            CurrentTaskList.Add(new TableTaskCurrent
+        //            {
 
+        //            });
+        //        }));
+        //    }
+        //}
     }
 }

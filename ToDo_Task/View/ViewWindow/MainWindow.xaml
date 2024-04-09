@@ -6,6 +6,7 @@
     xmlns:fa5="http://schemas.fontawesome.com/icons/"
     xmlns:local="clr-namespace:ToDo_Task"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="clr-namespace:TaskOperation"
     x:Name="MainWindows"
     Title="ToDo Task"
     Width="800"
@@ -14,29 +15,46 @@
     MinHeight="600"
     Loaded="MainWindows_Loaded"
     mc:Ignorable="d">
-    <Window.InputBindings>
+
+    <Window.DataContext>
+        <mvvm:Tasker />
+    </Window.DataContext>
+
+    <!--<Window.InputBindings>
         <KeyBinding
             Key="Q"
             Command="{Binding CloseApplicationCommand}"
             Modifiers="Ctrl" />
-    </Window.InputBindings>
-    <Window.Resources />
+    </Window.InputBindings>-->
+
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="70" />
         </Grid.RowDefinitions>
 
-
         <Grid
             Grid.Row="0"
             Background="DarkGray"
             ShowGridLines="True">
-            <DataGrid
+            <!--<DataGrid
                 x:Name="dataGrid_Main"
                 Margin="0"
                 Padding="0"
-                AutoGenerateColumns="True" />
+                AutoGenerateColumns="True" />-->
+            <ListView x:Name="lstView_Main" ItemsSource="{Binding Path=CurrentTaskList}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=TitleTask}" Header="Title" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=TextTask}" Header="Text" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateCreate}" Header="Date Create" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateEnd}" Header="Date End" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Status}" Header="Status" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
 
         <Grid Grid.Row="1">

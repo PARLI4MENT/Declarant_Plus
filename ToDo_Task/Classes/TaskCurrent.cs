@@ -2,7 +2,7 @@
 {
     public class TableTaskCurrent
     {
-        public static string table_name { get; } = "TaskCurrent";
+        //public static string table_name { get; } = "TaskCurrent";
 
         public string ID { get; set; }
         public string TitleTask { get; set; }
