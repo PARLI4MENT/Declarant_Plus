@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Globalization;
 using System.Reflection;
 
 namespace ToDo_Tasker_clr
@@ -192,47 +193,83 @@ namespace ToDo_Tasker_clr
             //}
             #endregion
 
-            using (var conn = new SqliteConnection(msConnString))
+            #region _2
+            //using (var conn = new SqliteConnection(msConnString))
+            //{
+            //    conn.Open();
+            //    var comm = new SqliteCommand("SELECT * FROM TaskCurrent", conn);
+            //    comm.ExecuteNonQuery();
+
+            //    using (SqliteDataReader dataReader = comm.ExecuteReader())
+            //    {
+            //        if (dataReader.HasRows)
+            //        {
+            //            var lst = new List<TableTaskCurrent>();
+            //            while (dataReader.Read())
+            //            {
+            //                var id = dataReader.GetValue(0);
+            //                var titleTask = dataReader.GetValue(1);
+            //                var textTask = dataReader.GetValue(2);
+            //                var dateCreated = dataReader.GetValue(3);
+            //                var dateEnd = dataReader.GetValue(4);
+            //                var status = dataReader.GetValue(5);
+
+            //                lst.Add(new TableTaskCurrent
+            //                {
+            //                    ID= id.ToString(),
+            //                    TitleTask=titleTask.ToString(),
+            //                    TextTask=textTask.ToString(),
+            //                    DateCreate = Convert.ToDateTime(dateCreated),
+            //                    DateEnd = Convert.ToDateTime(dateEnd),
+            //                    Status = Convert.ToUInt32(status)
+            //                });
+
+            //            }
+
+            //            foreach (var item in lst)
+            //                Console.WriteLine($"{item.ID}\t{item.TitleTask}\t{item.TextTask}\t{item.DateCreate}\t{item.DateEnd}\t{item.Status}");
+            //        }
+
+            //    }
+            //}
+            #endregion
+
+            #region _3
+            void GetSalary(dynamic value, Type type)
             {
-                conn.Open();
-                var comm = new SqliteCommand("SELECT * FROM TaskCurrent", conn);
-                comm.ExecuteNonQuery();
-                
-                using (SqliteDataReader dataReader = comm.ExecuteReader())
+                if (value.GetType() == type)
                 {
-                    if (dataReader.HasRows)
-                    {
-                        var lst = new List<TableTaskCurrent>();
-                        while (dataReader.Read())
-                        {
-                            var id = dataReader.GetValue(0);
-                            var titleTask = dataReader.GetValue(1);
-                            var textTask = dataReader.GetValue(2);
-                            var dateCreated = dataReader.GetValue(3);
-                            var dateEnd = dataReader.GetValue(4);
-                            var status = dataReader.GetValue(5);
-
-                            lst.Add(new TableTaskCurrent
-                            {
-                                ID= id.ToString(),
-                                TitleTask=titleTask.ToString(),
-                                TextTask=textTask.ToString(),
-                                DateCreate = Convert.ToDateTime(dateCreated),
-                                DateEnd = Convert.ToDateTime(dateEnd),
-                                Status = Convert.ToUInt32(status)
-                            });
-                            
-                        }
-
-                        foreach (var item in lst)
-                            Console.WriteLine($"{item.ID}\t{item.TitleTask}\t{item.TextTask}\t{item.DateCreate}\t{item.DateEnd}\t{item.Status}");
-                    }
-
+                    Console.WriteLine($"TRUE => {value.GetType()} <= {type.ToString()}");
                 }
             }
+
+
+            GetSalary(1, Int32);
+
+            #endregion
 
             Console.WriteLine();
             Console.ReadKey();
         }
+    }
+
+    public class Person
+    { 
+        public string Name { get; }
+        public dynamic Age {  get; set; }
+        
+        public Person(string name, dynamic age)
+        {
+            Name = name;
+            Age = age;
+        }
+
+        //public dynamic GetSalary(dynamic value, string format)
+        //{
+        //    if (format.GetType() == typeof())
+        //    {
+
+        //    }
+        //}
     }
 }
