@@ -55,6 +55,18 @@ namespace TaskOperation
             }
         }
 
+        private ICommand _AddRow;
+        public ICommand AddRow
+        {
+            get
+            {
+                return _AddRow ?? (_AddRow = new RelayCommand(() =>
+                {
+
+                }));
+            }
+        }
+
 
         //private ICommand _AddTask;
         //public ICommand AddTask

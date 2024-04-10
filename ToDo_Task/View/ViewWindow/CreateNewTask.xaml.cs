@@ -1,15 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ToDo_Task
 {
-    /// <summary>
-    /// Interaction logic for CreateNewTask.xaml
-    /// </summary>
-    /// 
-
     public partial class CreateNewTask : Window
     {
         private double _WWnd;
@@ -35,11 +31,15 @@ namespace ToDo_Task
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(datePicker_AddTask.SelectedDate.ToString());
+        }
     }
 
     public class MVVM: ObservableRecipient
     {
-
         private DateTime _Date = DateTime.Now;
         public DateTime Date
         {

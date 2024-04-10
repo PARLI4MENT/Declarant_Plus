@@ -1,14 +1,25 @@
-﻿namespace ToDo_Task.Classes
-{
-    public class TableTaskCurrent
-    {
-        //public static string table_name { get; } = "TaskCurrent";
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-        public string ID { get; set; }
-        public string TitleTask { get; set; }
-        public string TextTask { get; set; }
-        public DateTime DateCreate { get; set; }
-        public DateTime? DateEnd { get; set; }
-        public uint Status { get; set; }
+namespace ToDo_Task.Classes
+{
+    public partial class TableTaskCurrent: ObservableObject
+    {
+        [ObservableProperty]
+        private string _ID;
+
+        [ObservableProperty]
+        private string _TitleTask;
+
+        [ObservableProperty]
+        private string _TextTask;
+
+        [ObservableProperty]
+        private DateTime _DateCreate;
+
+        [ObservableProperty]
+        private DateTime? _DateEnd;
+
+        [ObservableProperty]
+        private uint _Status;
     }
 }

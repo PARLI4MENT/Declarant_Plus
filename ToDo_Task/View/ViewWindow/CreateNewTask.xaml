@@ -5,12 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ToDo_Task"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="clr-namespace:TaskOperation"
+    xmlns:todoTask="clr-namespace:ToDo_Task.Classes"
     Title=""
     Width="450"
     Height="800"
     mc:Ignorable="d">
 
     <Window.Resources>
+
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="20" />
             <Setter Property="Margin" Value="5,0,5,0" />
@@ -24,38 +27,68 @@
             <Setter Property="Margin" Value="7,10,5,0" />
             <Setter Property="FontStyle" Value="Normal" />
         </Style>
+
+        <!--  Edit DatePickerTextBox  -->
+        <Style TargetType="{x:Type DatePickerTextBox}">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <TextBox x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, StringFormat='dd.MM.yyyy HH:mm', RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Window.Resources>
+
+    <Window.DataContext>
+        <todoTask:TableTaskCurrent />
+    </Window.DataContext>
 
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Задача" />
-                <TextBox x:Name="txtBox_TitleTas" Text="{}" />
+                <TextBox x:Name="txtBox_TitleTas" Text="{Binding TitleTask}" />
             </StackPanel>
+
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Описание" />
-                <RichTextBox
+                <TextBox
                     x:Name="txtBox_TextTask"
                     Height="250"
                     Margin="5,0,5,10"
+                    AcceptsReturn="True"
                     FontFamily="Verdana"
-                    FontSize="14" />
+                    FontSize="14"
+                    Text="{Binding TextTask}"
+                    TextWrapping="Wrap" />
             </StackPanel>
+
             <StackPanel Orientation="Vertical">
                 <TextBlock x:Name="txtBox_Main" Text="Дата и время" />
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel Margin="1,1,1,1" Orientation="Horizontal">
                     <DatePicker
                         Name="datePicker_AddTask"
+                        Width="220"
+                        Height="25"
+                        Margin="5,0,0,5"
+                        HorizontalAlignment="Left"
+                        SelectedDate="{Binding DateEnd}" />
+
+                    <Button
+                        x:Name="btn_CreateTask"
                         Width="140"
                         Height="25"
-                        Margin="5,0,0,5" />
-                    <TextBox
-                        x:Name="txtBox_Time"
-                        Width="250"
-                        Height="25"
-                        PreviewTextInput="txtBox_Time_PreviewTextInput" />
+                        Margin="5,0,0,5"
+                        HorizontalAlignment="Right"
+                        Command="{Binding Path}"
+                        Content="Добавить задачу"
+                        FontSize="13" />
                 </StackPanel>
             </StackPanel>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" />
+
         </StackPanel>
     </Grid>
 
