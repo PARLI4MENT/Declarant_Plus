@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo_Task_WinForm", "ToDo_T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo_Task", "ToDo_Task\ToDo_Task.csproj", "{97FEAD1A-B700-4C5B-8353-5A0B0BA0B14C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Practics", "Practics", "{B8467FF2-F3BB-46BD-B355-0F7030E52F9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "practics1", "practics1\practics1.csproj", "{A9AAFCAD-6882-4E00-8EEA-F4004638457F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +37,16 @@ Global
 		{97FEAD1A-B700-4C5B-8353-5A0B0BA0B14C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97FEAD1A-B700-4C5B-8353-5A0B0BA0B14C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97FEAD1A-B700-4C5B-8353-5A0B0BA0B14C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9AAFCAD-6882-4E00-8EEA-F4004638457F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9AAFCAD-6882-4E00-8EEA-F4004638457F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9AAFCAD-6882-4E00-8EEA-F4004638457F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9AAFCAD-6882-4E00-8EEA-F4004638457F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A9AAFCAD-6882-4E00-8EEA-F4004638457F} = {B8467FF2-F3BB-46BD-B355-0F7030E52F9E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5E57F8FE-4B08-4445-8A8E-2E08560528C4}
