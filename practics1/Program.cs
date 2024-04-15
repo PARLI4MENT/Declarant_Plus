@@ -61,45 +61,44 @@ namespace practics1
             */
 
             //PARSE TXT FILE
-            string[] lines ;
-            if (File.Exists(strPathTNVED))
-            {
-                lines = File.ReadAllLines(strPathTNVED);
-                ParseByMask(ref lines);
-            }
-
-
+            ParseTNVED(strPathTNVED);
 
             Console.ReadKey();
         }
 
-        static void ParseByMask(ref string[] lines)
+        static void ParseTNVED(string pathTNVED)
         {
-            List<CodesTNVED> codes = new List<CodesTNVED>();
-            
-            #region Parse numb group
-            Regex group = new Regex(@"^\d{2}", RegexOptions.IgnoreCase & RegexOptions.Compiled);
-
-            int i = 0;
-            foreach (var line in lines)
+            if (File.Exists(strPathTNVED))
             {
-                #region Parse code of group
-                if (line.Length > 3)
+                string[] lines = File.ReadAllLines(pathTNVED);
+
+                var codes = new List<CodesTNVED>();
+
+                #region Parse numb group
+                Regex group = new Regex(@"^\d{2}", RegexOptions.IgnoreCase & RegexOptions.Compiled);
+
+                int i = 0;
+                foreach (var line in lines)
                 {
-                    MatchCollection match = group.Matches(line);
-                    string[] arrSub = line.Substring(3).Split(',');
-                    //Debug.WriteLine("ARR:\t{0}", match[0].Value);
-                    foreach (var sub in arrSub)
+                    #region Parse code of group
+                    if (line.Length > 3)
                     {
-                        //Debug.WriteLine("\tSub\t{0}", sub);
+                        i++;
+                        MatchCollection match = group.Matches(line);
+                        string[] arrSub = line.Substring(3).Split(',');
                         codes.Add(new CodesTNVED { GroupCode = Convert.ToUInt32(match[0].Value), Codes = arrSub });
+                        //Debug.WriteLine("ARR:\t{0}", match[0].Value);
+                        //foreach (var sub in arrSub)
+                        //{
+                        //    //Debug.WriteLine("\tSub\t{0}", sub);
+                        //}
                     }
+                    #endregion
                 }
+                Debug.WriteLine("Count numb of group {0}", i);
+
                 #endregion
             }
-            Console.WriteLine("Count numb of group {0}", i);
-
-            #endregion
         }
     }
 }
