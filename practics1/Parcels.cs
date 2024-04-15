@@ -3,6 +3,7 @@ namespace practics1
 {
     public class Parcels
     {
+        public uint Index { get; set; }
         /// <summary>  Код => [1] </summary>
         public string? Code {  get; set; }
 
@@ -16,16 +17,16 @@ namespace practics1
         public double Cost2 { get; set; }
 
         /// <summary> Вес => [6] </summary>
-        public double Weight { get; set; }
+        public double WeightFull { get; set; }
 
         /// <summary> Вес2 => [7] </summary>
-        public double Weight2 { get; set; }
+        public double Weight { get; set; }
 
         /// <summary> Трек => [8] </summary>
         public string? Track { get; set; }
 
         public string? GetOutData() =>
-            $"{this.Code}\t{this.Count}\t{this.Cost}\t{this.Cost2}\t{this.Weight}\t{this.Weight2}\t{this.Track}\n";
+            $"#{this.Index}\t{this.Code}\t{this.Count}\t{this.Cost}\t{this.Cost2}\t{this.WeightFull}\t{this.Weight}\t{this.Track}\n";
 
     }
 }
