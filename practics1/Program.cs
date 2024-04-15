@@ -75,8 +75,6 @@ namespace practics1
                 var codes = new List<CodesTNVED>();
 
                 #region Parse numb group
-                Regex group = new Regex(@"^\d{2}", RegexOptions.IgnoreCase & RegexOptions.Compiled);
-
                 int i = 0;
                 foreach (var line in lines)
                 {
@@ -84,19 +82,13 @@ namespace practics1
                     if (line.Length > 3)
                     {
                         i++;
-                        MatchCollection match = group.Matches(line);
+                        MatchCollection match = new Regex(@"^\d{2}", RegexOptions.IgnoreCase & RegexOptions.Compiled).Matches(line);
                         string[] arrSub = line.Substring(3).Split(',');
                         codes.Add(new CodesTNVED { GroupCode = Convert.ToUInt32(match[0].Value), Codes = arrSub });
-                        //Debug.WriteLine("ARR:\t{0}", match[0].Value);
-                        //foreach (var sub in arrSub)
-                        //{
-                        //    //Debug.WriteLine("\tSub\t{0}", sub);
-                        //}
                     }
                     #endregion
                 }
                 Debug.WriteLine("Count numb of group {0}", i);
-
                 #endregion
             }
         }
