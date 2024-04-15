@@ -8,7 +8,7 @@ namespace practics1
 {
     public class CodesTNVED
     {
-        public uint Group {  get; set; }
-        public List<string> Codes { get; set; }
+        public uint GroupCode {  get; set; }
+        public string[] Codes { get; set; }
     }
 }

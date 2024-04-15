@@ -60,30 +60,11 @@ namespace practics1
             }
             */
 
-            // PARSE TXT FILE
-            //var reg = new Regex();
-
-            //using (var fileStream = File.OpenRead(strPathTNVED))
-            //{
-            //    using (var streamReader = new  StreamReader(fileStream, Encoding.UTF8, true, 128))
-            //    {
-            //        String line;
-            //        while((line = streamReader.ReadLine()) != null)
-            //        {
-            //            Console.WriteLine(line);
-            //        }
-            //    }
-            //}
-
+            //PARSE TXT FILE
             string[] lines ;
             if (File.Exists(strPathTNVED))
             {
                 lines = File.ReadAllLines(strPathTNVED);
-                int i = 0;
-                foreach (var line in lines)
-                {
-                    //Console.WriteLine($"{++i}\tBASE: {line}");
-                }
                 ParseByMask(ref lines);
             }
 
@@ -94,29 +75,29 @@ namespace practics1
 
         static void ParseByMask(ref string[] lines)
         {
+            List<CodesTNVED> codes = new List<CodesTNVED>();
+            
             #region Parse numb group
-            string regGroup = @"^\d{2}";
-            Regex group = new Regex(regGroup, RegexOptions.IgnoreCase & RegexOptions.Compiled);
+            Regex group = new Regex(@"^\d{2}", RegexOptions.IgnoreCase & RegexOptions.Compiled);
 
             int i = 0;
             foreach (var line in lines)
             {
-                MatchCollection match = group.Matches(line);
-                if (match.Count == 1)
+                #region Parse code of group
+                if (line.Length > 3)
                 {
-                    i++;
-                    string strMatch = match[0].Value;
-                    //var arrs = Regex.Matches(line, regGroup)
-                    //    .Cast<Match>()
-                    //    .Select(m => m.Value)
-                    //    .ToArray();
-                    Console.WriteLine("ARR:\t{0}",strMatch);
+                    MatchCollection match = group.Matches(line);
+                    string[] arrSub = line.Substring(3).Split(',');
+                    //Debug.WriteLine("ARR:\t{0}", match[0].Value);
+                    foreach (var sub in arrSub)
+                    {
+                        //Debug.WriteLine("\tSub\t{0}", sub);
+                        codes.Add(new CodesTNVED { GroupCode = Convert.ToUInt32(match[0].Value), Codes = arrSub });
+                    }
                 }
+                #endregion
             }
             Console.WriteLine("Count numb of group {0}", i);
-            #endregion
-
-            #region Parse code of group
 
             #endregion
         }
