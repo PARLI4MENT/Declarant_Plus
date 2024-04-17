@@ -50,6 +50,8 @@ namespace BaseClass
                     workbook.ShowZeros = false;
                     var dataRow = workbook.Worksheet(1).RowsUsed().Skip(1);
 
+
+
                     uint i = 2;
                     foreach (var row in dataRow)
                     {
