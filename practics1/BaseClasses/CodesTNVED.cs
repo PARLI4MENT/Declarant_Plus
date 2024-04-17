@@ -28,8 +28,7 @@ namespace BaseClass
 
                 #region Parse numb group
                 int i = 0;
-                foreach (var line in lines)
-                {
+                Parallel.ForEach(lines, line => {
                     #region Parse code of group
                     if (line.Length > 3)
                     {
@@ -48,7 +47,30 @@ namespace BaseClass
 #endif
                     }
                     #endregion
-                }
+                });
+
+                /// Заменен на параллельный перебор
+//                foreach (var line in lines)
+//                {
+//                    #region Parse code of group
+//                    if (line.Length > 3)
+//                    {
+//                        i++;
+//                        MatchCollection match = new Regex(@"^\d{2}", RegexOptions.IgnoreCase & RegexOptions.Compiled).Matches(line);
+//                        string[] arrSub = line.Substring(3).Split(',');
+//                        codes.Add(new CodesTNVED { GroupCode = Convert.ToUInt32(match[0].Value), Codes = arrSub });
+//#if DEBUG
+//                        Debug.WriteLine($"\nGroupCode:\t{match[0].Value}");
+//                        Debug.WriteLine("{");
+//                        foreach (var sub in arrSub)
+//                        {
+//                            Debug.WriteLine($"\tSubСode:\t {sub}");
+//                        }
+//                        Debug.WriteLine("}");
+//#endif
+//                    }
+//                    #endregion
+//                }
                 Debug.WriteLine("==============================> END DEBUG TXT <==============================");
                 return codes;
                 #endregion

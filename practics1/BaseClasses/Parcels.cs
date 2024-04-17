@@ -50,63 +50,57 @@ namespace BaseClass
                     workbook.ShowZeros = false;
                     var dataRow = workbook.Worksheet(1).RowsUsed().Skip(1);
 
-
-
                     uint i = 2;
-                    foreach (var row in dataRow)
+                    Parallel.ForEach(dataRow, row =>
                     {
-                        //Перебор всех ячеек
-                        //foreach (var cell in row.Cells())
-                        //{
-                        //    for (int j = 1; j < 8; j++)
-                        //        Console.WriteLine();
-                        //}
-
-                        /// Пока ничего более лаконичного не прошло в голову:((
-                        if (!string.IsNullOrEmpty(row.Cell(1).Value.ToString()) &&
-                            !string.IsNullOrEmpty(row.Cell(3).Value.ToString()) &&
-                            !string.IsNullOrEmpty(row.Cell(4).Value.ToString()) &&
-                            !string.IsNullOrEmpty(row.Cell(5).Value.ToString()) &&
-                            !string.IsNullOrEmpty(row.Cell(6).Value.ToString()) &&
-                            !string.IsNullOrEmpty(row.Cell(7).Value.ToString()) &&
-                            !string.IsNullOrEmpty(row.Cell(8).Value.ToString()))
+                        try
                         {
-                            tmpList.Add(new Parcels()
+                            //++i;
+                            /// Пока ничего более лаконичного не прошло в голову:((
+                            if (!string.IsNullOrEmpty(row.Cell(1).Value.ToString()) &&
+                                !string.IsNullOrEmpty(row.Cell(3).Value.ToString()) &&
+                                !string.IsNullOrEmpty(row.Cell(4).Value.ToString()) &&
+                                !string.IsNullOrEmpty(row.Cell(5).Value.ToString()) &&
+                                !string.IsNullOrEmpty(row.Cell(6).Value.ToString()) &&
+                                !string.IsNullOrEmpty(row.Cell(7).Value.ToString()) &&
+                                !string.IsNullOrEmpty(row.Cell(8).Value.ToString()))
                             {
-                                Index = i,
-                                Code = row.Cell(1).Value.ToString(),
-                                Count = Convert.ToUInt32(row.Cell(3).Value.ToString()),
-                                Cost = Convert.ToDouble(row.Cell(4).Value.ToString()),
-                                CostFull = Convert.ToDouble(row.Cell(5).Value.ToString()),
-                                WeightFull = Convert.ToDouble(row.Cell(6).Value.ToString()),
-                                Weight = Convert.ToDouble(row.Cell(7).Value.ToString()),
-                                Track = row.Cell(8).Value.ToString().ToUpper()
-                            });
+                                tmpList.Add(new Parcels()
+                                {
+                                    Index = i,
+                                    Code = row.Cell(1).Value.ToString(),
+                                    Count = Convert.ToUInt32(row.Cell(3).Value.ToString()),
+                                    Cost = Convert.ToDouble(row.Cell(4).Value.ToString()),
+                                    CostFull = Convert.ToDouble(row.Cell(5).Value.ToString()),
+                                    WeightFull = Convert.ToDouble(row.Cell(6).Value.ToString()),
+                                    Weight = Convert.ToDouble(row.Cell(7).Value.ToString()),
+                                    Track = row.Cell(8).Value.ToString().ToUpper()
+                                });
 #if DEBUG
-                            Debug.WriteLine($"[SUCCESS]\t{row.Cell(1).Value.ToString()}" +
-                            $"\t{row.Cell(3).Value.ToString()}" +
-                            $"\t{row.Cell(4).Value.ToString()}" +
-                            $"\t{row.Cell(5).Value.ToString()}" +
-                            $"\t{row.Cell(6).Value.ToString()}" +
-                            $"\t{row.Cell(7).Value.ToString()}" +
-                            $"\t{row.Cell(8).Value.ToString()}");
-#endif
-                        }
-#if DEBUG
-                        else
-                        {
-                            Debug.WriteLine($"[ERROR]\t{row.Cell(1).Value.ToString()}" +
+                                Debug.WriteLine($"[SUCCESS]\t{row.Cell(1).Value.ToString()}" +
                                 $"\t{row.Cell(3).Value.ToString()}" +
                                 $"\t{row.Cell(4).Value.ToString()}" +
                                 $"\t{row.Cell(5).Value.ToString()}" +
                                 $"\t{row.Cell(6).Value.ToString()}" +
                                 $"\t{row.Cell(7).Value.ToString()}" +
                                 $"\t{row.Cell(8).Value.ToString()}");
-                        }
 #endif
-                        i++;
-                    }
-
+                            }
+#if DEBUG
+                            else
+                            {
+                                Debug.WriteLine($"[ERROR]\t{row.Cell(1).Value.ToString()}" +
+                                    $"\t{row.Cell(3).Value.ToString()}" +
+                                    $"\t{row.Cell(4).Value.ToString()}" +
+                                    $"\t{row.Cell(5).Value.ToString()}" +
+                                    $"\t{row.Cell(6).Value.ToString()}" +
+                                    $"\t{row.Cell(7).Value.ToString()}" +
+                                    $"\t{row.Cell(8).Value.ToString()}");
+                            }
+                        } catch (Exception ex) { Console.WriteLine(ex.Message); }
+#endif
+                        Interlocked.Increment(ref i);
+                    });
                 }
                 Debug.WriteLine("==============================> END DEBUG XLS <==============================");
                 return tmpList;

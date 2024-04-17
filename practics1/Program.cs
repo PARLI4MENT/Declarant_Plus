@@ -7,7 +7,7 @@ namespace std
 {
     internal class Program
     {
-        static readonly string strPathXLS = "C:\\TaskParcels\\Parcels.xlsx";
+        static readonly string strPathXLS = "C:\\TaskParcels\\1.xlsx";
         static readonly string strPathTNVED = "C:\\TaskParcels\\TNVED_1538.txt";
 
         static void Main(string[] args)
