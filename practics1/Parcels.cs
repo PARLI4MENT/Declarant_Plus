@@ -14,7 +14,7 @@ namespace practics1
         public double Cost { get; set; } 
         
         /// <summary> Цена2 => [5] </summary>
-        public double Cost2 { get; set; }
+        public double CostFull { get; set; }
 
         /// <summary> Вес => [6] </summary>
         public double WeightFull { get; set; }
@@ -26,7 +26,8 @@ namespace practics1
         public string? Track { get; set; }
 
         public string? GetOutData() =>
-            $"#{this.Index}\t{this.Code}\t{this.Count}\t{this.Cost}\t{this.Cost2}\t{this.WeightFull}\t{this.Weight}\t{this.Track}\n";
+            $"#{this.Index}\t{this.Code}\t{this.Count}\t{this.Cost}\t{this.CostFull}\t{this.WeightFull}\t{this.Weight}\t{this.Track}\n";
+        public uint GetIndexRow() => Index;
 
     }
 }
