@@ -18,7 +18,7 @@ namespace BaseClass
     {
         public TxtFile() { }
 
-        public List<CodesTNVED>? ParseTxt(string path)
+        public List<CodesTNVED> ParseTxt(string path)
         {
             if (File.Exists(path))
             {
