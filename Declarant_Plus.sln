@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo_Task", "ToDo_Task\ToDo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Practics", "Practics", "{B8467FF2-F3BB-46BD-B355-0F7030E52F9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "practics1", "practics1\practics1.csproj", "{A9AAFCAD-6882-4E00-8EEA-F4004638457F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "practics1", "practics1\practics1.csproj", "{A9AAFCAD-6882-4E00-8EEA-F4004638457F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

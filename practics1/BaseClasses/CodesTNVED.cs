@@ -10,7 +10,7 @@ namespace BaseClass
 {
     public class CodesTNVED
     {
-        public uint GroupCode { get; set; }
+        public string GroupCode { get; set; }
         public string[] Codes { get; set; }
     }
 
@@ -30,22 +30,25 @@ namespace BaseClass
                 int i = 0;
                 Parallel.ForEach(lines, line => {
                     #region Parse code of group
-                    if (line.Length > 3)
-                    {
-                        i++;
-                        MatchCollection match = new Regex(@"^\d{2}", RegexOptions.IgnoreCase & RegexOptions.Compiled).Matches(line);
-                        string[] arrSub = line.Substring(3).Split(',');
-                        codes.Add(new CodesTNVED { GroupCode = Convert.ToUInt32(match[0].Value), Codes = arrSub });
+
+                    i++;
+                    MatchCollection match = new Regex(@"^\d{2}", RegexOptions.IgnoreCase & RegexOptions.Compiled).Matches(line);
+                    string[] arrSub = null; ;
+                    if (line.Length > 2)
+                        arrSub = line.Substring(3).Split(',');
+                    codes.Add(new CodesTNVED { GroupCode = match[0].Value, Codes = arrSub });
 #if DEBUG
-                        Debug.WriteLine($"\nGroupCode:\t{match[0].Value}");
-                        Debug.WriteLine("{");
+                    Debug.WriteLine($"\nGroupCode:\t{match[0].Value}");
+                    Debug.WriteLine("{");
+                    if (arrSub != null)
                         foreach (var sub in arrSub)
                         {
                             Debug.WriteLine($"\tSubСode:\t {sub}");
                         }
-                        Debug.WriteLine("}");
+                    else Debug.WriteLine($"\tSubСode:\t null");
+                    Debug.WriteLine("}");
 #endif
-                    }
+
                     #endregion
                 });
 
