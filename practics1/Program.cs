@@ -13,7 +13,7 @@ namespace std
         static readonly string strPathXLS = "C:\\TaskParcels\\1.xlsx";
         static readonly string strPathTNVED = "C:\\TaskParcels\\TNVED_1538.txt";
         static int EuroToRub = 100;
-        static int Duty = 200;
+        static double Duty = 200;
 
         static void Main(string[] args)
         {
@@ -40,21 +40,9 @@ namespace std
 
         private static void Check(ref List<Parcels> parcels, ref List<CodesTNVED> tnveds)
         {
-            //foreach (var par in parcels)
-            //{
-            //    Console.WriteLine($"{par.Code}\t=>\t{par.Code.Substring(0, 2)}");
-            //    par.CostFull.ToString();
-            //}
-
-            foreach (var c in parcels)
+            foreach (var parcel in parcels)
             {
-
-                if(CheckGroup(c.Code, ref tnveds))
-                {
-
-                }
-                else
-                    Console.WriteLine($"Код посылки{c.Code} [{c.Code.Substring(0, 2)}] => ГРУППА КОД => 1");
+                CheckGroup(parcel, ref tnveds);
             }
         }
 
@@ -63,22 +51,27 @@ namespace std
         /// True => Проверяем в исключения => CheckSubGroup().
         /// False => То сразу ставим статус 1 - (Беспошленные)
         /// </returns>
-        private static bool CheckGroup( string code, ref List<CodesTNVED> TNVEDs)
+        private static uint CheckGroup(Parcels parcel, ref List<CodesTNVED> TNVEDs)
         {
+            Console.WriteLine(parcel.GetOutData());
+
             foreach (var tn in TNVEDs)
             {
-                if (String.Equals(code.Substring(0, 2), tn.GroupCode.ToString()))
+                if (String.Equals(parcel.Code.Substring(0, 2), tn.GroupCode.ToString()))
                 {
-                    if (CheckSubGroup(ref code, tn))
+                    if (CheckSubGroup(ref parcel, tn))
                     {
-                        return true;
+                        Console.WriteLine($"PARCEL_Sub [{parcel.Code.Substring(0, 2)}] [{parcel.Code}] => tnvedCode [{tn.GroupCode}]\n");
+                        return 1;
                     }
-                    
-                    ///
+                    var i = CheckCost(parcel.CostFull);
+                    return i;
                 }
-                return false;
+                Console.WriteLine($"PARCEL_Sub [{parcel.Code.Substring(0, 2)}] [{parcel.Code}] => tnvedCode [{tn.GroupCode}]\n");
+                return 1;
             }
-            return false;
+            Console.WriteLine($"PARCEL_Sub [{parcel.Code.Substring(0, 2)}] [{parcel.Code}]\n");
+            return 1;
         }
 
 
@@ -87,16 +80,17 @@ namespace std
         /// true => Если совпадение найдено => Cтавим статус 1 - (Беспошленные)
         /// false => Если совпаденний не найдено => Проверяем на стоимость CheckCost()
         /// </returns>
-        private static bool CheckSubGroup(ref string code, CodesTNVED TNVED)
+        private static bool CheckSubGroup(ref Parcels parcel, CodesTNVED TNVED)
         {
-            foreach ( var subCode in TNVED.Codes)
+            foreach (var subCode in TNVED.Codes)
             {
-                if (subCode != null && code == subCode)
+                if (subCode != null && parcel.Code.Substring(0, subCode.Length) == subCode)
                 {
+                    Console.WriteLine($"PARCEL_Sub [{parcel.Code.Substring(0, subCode.Length)}] [{parcel.Code}] => tnvedSubCode [{subCode}]\n");
                     return true;
                 }
             }
-
+            Console.WriteLine($"PARCEL_Sub [{parcel.Code}] [{parcel.Code}]\n");
             return false;
         }
 
@@ -105,8 +99,17 @@ namespace std
         /// true => меньше Пошлины (Duty)
         /// false => больше или равен Пошлине (Duty)
         /// </returns>
-        private static bool CheckCost(double fullCost, int RubToEuro = 100)
-            => ((fullCost / RubToEuro) < Duty) ? true : false;
+        private static uint CheckCost(double fullCost, double RubToEuro = 100)
+        {
+            if ((fullCost / RubToEuro) < Duty)
+            {
+                Console.WriteLine($"\t\t{(fullCost / RubToEuro)}");
+                return 3;
+            }
+            
+            Console.WriteLine($"\t\t{(fullCost / RubToEuro)}");
+            return 2;
+        }
     }
 }
 /*
