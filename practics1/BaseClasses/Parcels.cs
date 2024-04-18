@@ -51,7 +51,7 @@ namespace BaseClass
                     var dataRow = workbook.Worksheet(1).RowsUsed().Skip(1);
 
                     uint i = 2;
-                    Parallel.ForEach(dataRow, row =>
+                    foreach(var row in dataRow)
                     {
                         try
                         {
@@ -77,13 +77,14 @@ namespace BaseClass
                                     Track = row.Cell(8).Value.ToString().ToUpper()
                                 });
 #if DEBUG
-                                Debug.WriteLine($"[SUCCESS]\t{row.Cell(1).Value.ToString()}" +
-                                $"\t{row.Cell(3).Value.ToString()}" +
-                                $"\t{row.Cell(4).Value.ToString()}" +
-                                $"\t{row.Cell(5).Value.ToString()}" +
-                                $"\t{row.Cell(6).Value.ToString()}" +
-                                $"\t{row.Cell(7).Value.ToString()}" +
-                                $"\t{row.Cell(8).Value.ToString()}");
+                                Debug.WriteLine($"[SUCCESS]\tINDEX => [{i}]\t" +
+                                    $"{row.Cell(1).Value.ToString()}" +
+                                    $"\t{row.Cell(3).Value.ToString()}" +
+                                    $"\t{row.Cell(4).Value.ToString()}" +
+                                    $"\t{row.Cell(5).Value.ToString()}" +
+                                    $"\t{row.Cell(6).Value.ToString()}" +
+                                    $"\t{row.Cell(7).Value.ToString()}" +
+                                    $"\t{row.Cell(8).Value.ToString()}");
 #endif
                             }
 #if DEBUG
@@ -100,7 +101,7 @@ namespace BaseClass
                         } catch (Exception ex) { Console.WriteLine(ex.Message); }
 #endif
                         Interlocked.Increment(ref i);
-                    });
+                    };
                 }
                 Debug.WriteLine("==============================> END DEBUG XLS <==============================");
                 return tmpList;
